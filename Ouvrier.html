@@ -1,0 +1,1760 @@
+<!DOCTYPE html>
+<!-- MAISON41 — Ouvrier · Mobile-first · Extrait du monolithe MAISON41_ERP_FINAL.html -->
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>MAISON41 — Ouvrier</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Fraunces:opsz,wght@9..144,200..400&family=Instrument+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════ CSS COMMUN (extrait monolithe) ═══════════════ */
+:root{
+  --ink:#0d0d0d;--parch:#f5f1e8;--amber:#c8820a;--ambl:#f0c060;--ampp:#fdf4dc;
+  --slate:#2a2825;--slatm:#4a4742;--stone:#7a7672;--stonl:#c8c4bc;
+  --cream:#faf8f2;--bg:#e8e4da;
+  --red:#c0392b;--green:#1a7a4a;--blue:#1a5a9a;--purp:#6a3a9a;--orange:#d4520a;
+  --div:rgba(0,0,0,.07);--divs:rgba(0,0,0,.13);
+  --sh:0 1px 3px rgba(0,0,0,.08),0 0 0 .5px rgba(0,0,0,.1);
+  --shlg:0 8px 32px rgba(0,0,0,.15),0 0 0 .5px rgba(0,0,0,.08);
+  --r:10px;--rlg:16px;--ok:#1a7a4a;--err:#c0392b;
+  --accent:#185FA5;--accent-l:#4A8FD5;
+}
+/* ─── DARK MODE ─── */
+body.dark{--bg:#1b1916;--cream:#141210;--parch:#1e1c19;--ink:#f0ece3;--stonl:#4a4742;--stone:#9a9690;--div:rgba(255,255,255,.08);--divs:rgba(255,255,255,.16);}
+body.dark .topbar{background:#0d0d0d!important;}
+body.dark input,body.dark select,body.dark textarea{background:#252220;color:#f0ece3;border-color:rgba(255,255,255,.18);}
+body.dark .modal-inner,body.dark .card{background:#1e1c19;}
+body.dark .kpi{background:#1e1c19;}
+#darkBtn{background:none;border:none;cursor:pointer;padding:6px;font-size:15px;color:rgba(255,255,255,.6);}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden}
+body{font-family:'Instrument Sans',system-ui,sans-serif;background:var(--bg);color:var(--ink);font-size:16px;line-height:1.5}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:var(--stonl);border-radius:10px}
+
+/* ── Login ── */
+#loginScreen{position:fixed;inset:0;background:var(--ink);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px}
+.login-box{background:#181614;border:1px solid #262220;border-radius:24px;padding:32px 28px;width:440px;max-width:100%;text-align:center;max-height:94vh;overflow-y:auto}
+.login-logo{display:flex;flex-direction:column;align-items:center;gap:7px;margin-bottom:4px}
+.login-logo-name{font-family:'Fraunces',serif;font-size:22px;font-weight:300;color:var(--ambl);letter-spacing:-.3px}
+.login-sub{font-size:10px;color:#4a4846;letter-spacing:3px;text-transform:uppercase;margin-bottom:3px}
+.login-tag{font-size:9.5px;color:#2d2b28;margin-bottom:18px}
+.login-who{font-size:10px;color:#555;letter-spacing:2px;text-transform:uppercase;margin-bottom:13px}
+.user-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(108px,1fr));gap:9px;margin-bottom:6px}
+.ucard{background:#1e1c1a;border:1px solid #2a2826;border-radius:14px;padding:14px 8px 11px;cursor:pointer;transition:.2s;text-align:center;display:flex;flex-direction:column;align-items:center;gap:7px}
+.ucard:active{transform:scale(.96);background:#252320}
+.ucard-avatar{width:50px;height:50px;border-radius:50%;border:2px solid;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:600;flex-shrink:0}
+.ucard-avatar-lg{width:62px;height:62px;font-size:20px;margin:0 auto 2px}
+.ucard-name{font-size:12px;color:#c8c4bc;font-weight:500;line-height:1.2}
+.ucard-role{font-size:9.5px;color:#4a4846;letter-spacing:.06em}
+.login-back{background:none;border:none;color:#4a4846;font-size:11.5px;cursor:pointer;padding:0 0 14px;display:flex;align-items:center;gap:5px;margin:0 auto;font-family:'Instrument Sans',sans-serif}
+.pin-user-info{display:flex;flex-direction:column;align-items:center;gap:5px;margin-bottom:22px}
+.pin-user-name{font-family:'Fraunces',serif;font-size:21px;font-weight:300;color:var(--ambl)}
+.pin-user-role-tag{font-size:9.5px;color:#4a4846;letter-spacing:.1em;text-transform:uppercase}
+.pin-dots{display:flex;gap:14px;justify-content:center;margin-bottom:26px}
+.pin-dot{width:15px;height:15px;border-radius:50%;background:#242220;border:1.5px solid #363432;transition:.25s}
+.pin-dot.filled{background:var(--amber);border-color:var(--amber);box-shadow:0 0 10px rgba(200,130,10,.45)}
+.pin-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:18px;max-width:280px;margin-left:auto;margin-right:auto}
+.pin-btn{background:#1e1c1a;border:1px solid #2e2c28;border-radius:12px;color:#d0ccc4;font-size:22px;font-weight:300;padding:15px 10px;cursor:pointer;transition:.16s;font-family:'Instrument Sans',sans-serif;user-select:none}
+.pin-btn:active{transform:scale(.93);background:#2e2c28}
+.pin-btn-del{font-size:15px;color:#666}
+.pin-btn-ok{background:var(--amber)!important;border-color:var(--amber)!important;color:white!important;font-size:17px;font-weight:500}
+.login-err{color:var(--red);font-size:11.5px;min-height:18px;text-align:center;margin-top:4px}
+
+/* ── App Shell ── */
+#app{display:none;flex-direction:column;height:100vh}
+#app.visible{display:flex}
+.topbar{background:var(--ink);display:flex;align-items:center;padding:0 16px;gap:8px;border-bottom:1px solid rgba(255,255,255,.06);z-index:100;height:54px;flex-shrink:0}
+.tlogo{font-family:'Fraunces',serif;font-size:15px;font-weight:300;color:var(--ambl);flex:1;display:flex;align-items:center;gap:8px}
+.tuser-name{font-size:11px;color:rgba(255,255,255,.5)}
+.tbtn{padding:5px 12px;border-radius:6px;border:none;font-size:11px;font-weight:500;cursor:pointer;font-family:'Instrument Sans',sans-serif;transition:.22s;background:rgba(255,255,255,.08);color:rgba(255,255,255,.6)}
+.tbtn-red{background:rgba(192,57,43,.25);color:#ff8875}
+/* ── Dot réseau ── */
+.net-dot{width:8px;height:8px;border-radius:50%;background:var(--green,#3dba6e);box-shadow:0 0 5px rgba(61,186,110,.5);transition:.4s;flex-shrink:0}
+.net-dot.offline{background:#e05252;box-shadow:0 0 5px rgba(224,82,82,.5)}
+/* ── Modal signature PIN ── */
+.sig-overlay{position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:2000;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:.2s}
+.sig-overlay.open{opacity:1;pointer-events:all}
+.sig-box{background:var(--card,#1a1816);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:24px 22px;width:min(320px,90vw);box-shadow:0 16px 48px rgba(0,0,0,.5)}
+.sig-title{font-family:'Fraunces',serif;font-size:17px;font-weight:300;color:var(--amber);text-align:center;margin-bottom:4px}
+.sig-sub{font-size:11px;color:var(--stone);text-align:center;margin-bottom:16px}
+.sig-dots{display:flex;gap:12px;justify-content:center;margin-bottom:16px}
+.sig-dot{width:12px;height:12px;border-radius:50%;background:#2e2c28;border:1.5px solid #3e3c38;transition:.2s}
+.sig-dot.filled{background:var(--amber);border-color:var(--amber);box-shadow:0 0 8px rgba(200,130,10,.4)}
+.sig-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:12px}
+.sig-btn{background:#1e1c1a;border:1px solid #2e2c28;border-radius:10px;color:#d0ccc4;font-size:20px;font-weight:300;padding:12px 8px;cursor:pointer;transition:.15s;font-family:'Instrument Sans',sans-serif}
+.sig-btn:active{transform:scale(.92);background:#2e2c28}
+.sig-err{font-size:11px;color:#ff8875;text-align:center;min-height:16px;margin-bottom:8px}
+.sig-cancel{display:block;width:100%;background:transparent;border:none;color:var(--stone);font-size:12px;cursor:pointer;padding:4px;font-family:'Instrument Sans',sans-serif}
+.sig-cancel:hover{color:#d0ccc4}
+.content{flex:1;overflow-y:auto;background:var(--bg);padding-bottom:80px}
+.view{display:none;padding:20px 16px;min-height:100%}.view.active{display:block}
+.ph{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;gap:12px;flex-wrap:wrap}
+.ph-left .ph-title{font-family:'Fraunces',serif;font-size:26px;font-weight:300;letter-spacing:-.5px;line-height:1}
+.ph-left .ph-sub{color:var(--stone);font-size:13px;margin-top:4px}
+.ph-right{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+
+/* ── Bottom Nav ── */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;height:64px;background:var(--ink);display:flex;border-top:1px solid rgba(255,255,255,.08);z-index:200}
+.bnav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--stone);font-size:10px;gap:3px;cursor:pointer;transition:.2s;padding:4px 0}
+.bnav-item.active{color:var(--accent-l)}
+.bnav-item .bnav-ico{font-size:20px}
+
+/* ── Buttons (mobile-sized) ── */
+.btn{padding:9px 18px;border-radius:8px;border:none;font-size:14px;font-weight:500;cursor:pointer;font-family:'Instrument Sans',sans-serif;transition:.22s;display:inline-flex;align-items:center;gap:6px;min-height:44px}
+.btn-primary{background:var(--amber);color:white}.btn-primary:active{background:#b8720a}
+.btn-secondary{background:white;color:var(--slate);border:.5px solid var(--divs)}.btn-secondary:active{background:var(--parch)}
+.btn-danger{background:var(--red);color:white}.btn-green{background:var(--green);color:white}
+.btn-ghost{background:transparent;color:var(--stone);border:.5px solid var(--divs)}
+.btn-sm{padding:6px 12px;font-size:12px;min-height:36px}.btn-xs{padding:4px 9px;font-size:11px;min-height:32px}
+.btn-lg{height:56px;min-height:56px;font-size:16px;border-radius:14px;width:100%;justify-content:center}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn-block{width:100%;justify-content:center}
+
+/* ── Cards & Tables ── */
+.kpi-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:20px}
+.kpi{background:white;border-radius:var(--r);padding:14px 16px;border:.5px solid var(--div)}
+.kpi-label{font-size:10px;color:var(--stone);letter-spacing:.04em;text-transform:uppercase;margin-bottom:6px}
+.kpi-val{font-size:24px;font-weight:300;font-family:'Fraunces',serif;line-height:1}
+.kpi-sub{font-size:11px;color:var(--stone);margin-top:4px}
+.kpi-red .kpi-val{color:var(--red)}.kpi-amber .kpi-val{color:var(--amber)}.kpi-green .kpi-val{color:var(--green)}
+.tbl-wrap{background:white;border-radius:var(--r);border:.5px solid var(--div);overflow:hidden;margin-bottom:16px}
+.tbl-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:.5px solid var(--div)}
+.tbl-title{font-size:13px;font-weight:600;color:var(--slate)}
+table.data{width:100%;border-collapse:collapse;font-size:12px}
+table.data th{font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--stone);padding:8px 12px;text-align:left;border-bottom:.5px solid var(--div);white-space:nowrap}
+table.data td{padding:8px 12px;border-bottom:.5px solid var(--div);vertical-align:middle}
+table.data tr:last-child td{border-bottom:none}
+.tag{display:inline-flex;align-items:center;padding:2px 8px;border-radius:6px;font-size:10px;font-weight:600;white-space:nowrap}
+.tag-red{background:#fde8e6;color:#8b1a0e}.tag-amber{background:var(--ampp);color:#7a3d06}
+.tag-green{background:#e2f4eb;color:#0f4d28}.tag-blue{background:#e8f0fb;color:#1a3a7a}
+.tag-gray{background:#f0eee8;color:#5a5650}
+
+/* ── Modals ── */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;display:none;align-items:flex-end;justify-content:center;padding:0}
+.overlay.open{display:flex}
+.modal{background:white;border-radius:20px 20px 0 0;width:100%;max-height:92vh;display:flex;flex-direction:column;box-shadow:var(--shlg)}
+.modal-desktop{border-radius:var(--rlg);max-width:560px;max-height:92vh;margin:auto}
+.mh{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:.5px solid var(--div);flex-shrink:0}
+.mh-title{font-family:'Fraunces',serif;font-size:21px;font-weight:300;letter-spacing:-.3px}
+.mh-close{width:34px;height:34px;border-radius:8px;border:none;background:var(--bg);cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;color:var(--stone)}
+.mb{flex:1;overflow-y:auto;padding:18px 20px}
+.mf{display:flex;justify-content:space-between;align-items:center;padding:12px 20px;border-top:.5px solid var(--div);background:var(--cream);flex-shrink:0;gap:8px}
+.mf .btn{flex:1;justify-content:center}
+.form-row{display:grid;gap:10px;margin-bottom:10px}
+.form-row.c2{grid-template-columns:1fr 1fr}
+.form-group{display:flex;flex-direction:column;gap:4px}
+label.fl{font-size:10px;font-weight:700;color:var(--slatm);letter-spacing:.08em;text-transform:uppercase}
+label.fl .req{color:var(--red)}
+input,select,textarea{padding:12px 14px;border-radius:10px;border:.5px solid var(--divs);font-size:16px;font-family:'Instrument Sans',sans-serif;color:var(--ink);background:white;outline:none;transition:.22s;width:100%}
+input:focus,select:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 2px rgba(24,95,165,.12)}
+input[readonly]{background:var(--parch);color:var(--amber);font-weight:500}
+input[inputmode="decimal"],input[type="number"]{font-size:20px}
+.form-hint{font-size:11px;color:var(--stone);margin-top:2px}
+
+/* ── Alerts ── */
+.alert-banner{border-radius:var(--r);padding:12px 16px;margin-bottom:14px;display:flex;gap:10px;align-items:flex-start;font-size:13px}
+.alert-banner-red{background:rgba(192,57,43,.07);border:.5px solid rgba(192,57,43,.25);color:#7a1a14}
+.alert-banner-amber{background:rgba(200,130,10,.07);border:.5px solid rgba(200,130,10,.25);color:#5a3a08}
+.alert-banner-green{background:rgba(26,122,74,.07);border:.5px solid rgba(26,122,74,.25);color:#0f4d28}
+.empty-state{text-align:center;padding:40px 16px;color:var(--stone)}
+.empty-state .es-icon{font-size:32px;margin-bottom:12px;opacity:.4}
+.empty-state .es-text{font-size:13px}
+.skel{background:linear-gradient(90deg,#e8e4da 25%,#f0ede6 50%,#e8e4da 75%);background-size:200% 100%;animation:skel 1.4s infinite;border-radius:6px;height:14px;margin-bottom:10px}
+@keyframes skel{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* ── Toast ── */
+#toastContainer{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);z-index:9990;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none;width:min(360px,calc(100vw - 32px))}
+.toast{padding:10px 16px;border-radius:10px;font-size:13px;font-weight:500;box-shadow:var(--shlg);animation:toastIn .25s ease;pointer-events:none;text-align:center}
+.toast-success{background:#0f4d28;color:#5ddb8a}.toast-error{background:#7a1a0e;color:#ff8875}.toast-info{background:var(--slate);color:var(--stonl)}.toast-warn{background:#5a3a08;color:var(--ambl)}
+@keyframes toastIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── NC Bannière ── */
+.nc-banner{position:fixed;inset:0;z-index:9998;background:var(--red);display:flex;flex-direction:column;align-items:center;justify-content:center;color:white;gap:24px;padding:32px}
+.nc-banner h1{font-size:28px;font-weight:700;text-align:center;font-family:'Fraunces',serif;line-height:1.2}
+.nc-banner p{font-size:16px;text-align:center;opacity:.9;max-width:400px}
+.nc-banner .btn-nc-ack{background:white;color:var(--red);font-size:18px;font-weight:700;padding:16px 32px;border-radius:16px;border:none;cursor:pointer;min-height:58px}
+
+/* ── Timer ── */
+.ac-timer-display{font-size:48px;font-weight:300;font-family:'DM Mono',monospace;color:var(--accent-l);letter-spacing:4px;text-align:center;padding:16px;background:rgba(0,0,0,.8);border-radius:16px;margin-bottom:16px}
+.timer-bar{display:flex;gap:8px;justify-content:center;margin-bottom:12px}
+.timer-bar .btn{min-width:80px}
+.timer-target{font-size:12px;color:var(--stone);text-align:center;margin-bottom:16px}
+
+/* ── Labo specific ── */
+.lot-card{background:white;border-radius:var(--r);border:.5px solid var(--div);padding:14px 16px;margin-bottom:10px;display:flex;flex-direction:column;gap:8px}
+.lot-card-header{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.lot-num{font-family:'DM Mono',monospace;font-size:11px;color:var(--amber);background:var(--ampp);padding:3px 8px;border-radius:6px}
+.lot-recette{font-weight:600;font-size:14px}
+.lot-meta{font-size:12px;color:var(--stone)}
+.bareme-badge{background:var(--accent)22;color:var(--accent);border:1px solid var(--accent)40;padding:4px 10px;border-radius:8px;font-size:12px;font-weight:600}
+
+/* ── Tracabilite ── */
+.trac-ingr-row{background:var(--bg);border-radius:10px;padding:12px 14px;margin-bottom:8px}
+.trac-ingr-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.trac-ingr-name{font-weight:600;font-size:13px}
+.photo-btn{background:var(--accent);color:white;border:none;border-radius:8px;padding:8px 14px;font-size:14px;cursor:pointer;display:flex;align-items:center;gap:6px;min-height:40px}
+.photo-preview{width:100%;height:120px;object-fit:cover;border-radius:8px;margin-top:8px}
+
+/* ── Mode lot rapide ── */
+#lot-rapide-toggle{background:none;border:1.5px solid rgba(255,255,255,.25);border-radius:6px;color:rgba(255,255,255,.7);font-size:11px;padding:3px 9px;cursor:pointer;transition:.2s;margin-left:8px;}
+#lot-rapide-toggle.on{background:rgba(255,255,255,.15);color:#fff;border-color:rgba(255,255,255,.5);}
+.lot-rapide-hide{overflow:hidden;transition:max-height .25s ease,opacity .2s ease;max-height:200px;opacity:1;}
+body.lot-rapide .lot-rapide-hide{max-height:0!important;opacity:0!important;margin:0!important;pointer-events:none;}
+/* ─── ONBOARDING PREMIÈRE CONNEXION ─── */
+@keyframes obFadeIn{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:scale(1)}}
+#onboard-overlay{position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:10000;display:none;align-items:center;justify-content:center;padding:20px;}
+#onboard-overlay.visible{display:flex;}
+.ob-box{background:var(--parch,#f5f1e8);border-radius:20px;padding:36px 32px 28px;width:460px;max-width:100%;text-align:center;box-shadow:0 24px 64px rgba(0,0,0,.35);animation:obFadeIn .22s ease;}
+.ob-step{display:none;}.ob-step.active{display:block;animation:obFadeIn .18s ease;}
+.ob-icon{font-size:40px;margin-bottom:16px;}
+.ob-title{font-family:'Fraunces',serif;font-size:22px;font-weight:400;color:var(--ink,#0d0d0d);margin-bottom:10px;}
+.ob-desc{font-size:14px;color:var(--stone,#6a655e);line-height:1.65;margin-bottom:24px;}
+.ob-zones{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:24px;}
+.ob-zone{background:rgba(0,0,0,.05);border:1px solid rgba(0,0,0,.1);border-radius:8px;padding:7px 13px;font-size:13px;color:var(--ink,#0d0d0d);}
+.ob-dots{display:flex;gap:8px;justify-content:center;margin-bottom:20px;}
+.ob-dot{width:7px;height:7px;border-radius:50%;background:var(--div,#e0d9d0);transition:.2s;}
+.ob-dot.active{background:var(--accent,#185FA5);transform:scale(1.3);}
+.ob-btn{background:var(--accent,#185FA5);color:#fff;border:none;border-radius:10px;padding:13px 32px;font-size:15px;font-weight:600;cursor:pointer;width:100%;transition:.15s;font-family:'Instrument Sans',sans-serif;}
+.ob-btn:hover{filter:brightness(1.1);}
+.ob-skip{display:block;margin-top:12px;font-size:11.5px;color:var(--stone,#9a9690);cursor:pointer;background:none;border:none;font-family:'Instrument Sans',sans-serif;}
+.ob-skip:hover{color:var(--ink,#0d0d0d);}
+</style>
+</head>
+<body>
+
+<!-- ─── ONBOARDING PREMIÈRE CONNEXION ─── -->
+<div id="onboard-overlay">
+  <div class="ob-box">
+    <div class="ob-step active">
+      <div class="ob-icon">👋</div>
+      <div class="ob-title">Bienvenue, Ouvrier</div>
+      <div class="ob-desc">Votre espace de production HACCP en temps réel. Chaque enregistrement va directement dans le Sheets partagé — aucune double saisie.</div>
+    </div>
+    <div class="ob-step">
+      <div class="ob-icon">🗂️</div>
+      <div class="ob-title">Vos 4 zones de travail</div>
+      <div class="ob-zones">
+        <span class="ob-zone">🥫 Labo — lots &amp; planning</span>
+        <span class="ob-zone">🛡️ HACCP — contrôles CCP</span>
+        <span class="ob-zone">🔥 Autoclaves — stérilisation</span>
+        <span class="ob-zone">📦 Traçabilité — matières premières</span>
+      </div>
+    </div>
+    <div class="ob-step">
+      <div class="ob-icon">⚠️</div>
+      <div class="ob-title">Point critique CCP1</div>
+      <div class="ob-desc">Si la température relevée est <strong>sous 115 °C</strong>, le lot passe automatiquement en <strong>NC</strong> et une fiche HACCP est créée. Un écran d'alerte bloquant s'affiche immédiatement.</div>
+    </div>
+    <div class="ob-dots">
+      <div class="ob-dot active"></div>
+      <div class="ob-dot"></div>
+      <div class="ob-dot"></div>
+    </div>
+    <button class="ob-btn" id="ob-btn" onclick="_obNext()">Suivant →</button>
+    <button class="ob-skip" onclick="_obClose()">Passer l'intro</button>
+  </div>
+</div>
+
+<!-- LOADER -->
+<div id="_loader">
+  <div class="sk-spin"></div>
+  <p>MAISON 41 · Ouvrier</p>
+</div>
+
+<!-- LOGIN SCREEN -->
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">
+      <div class="login-logo-name">Maison 41</div>
+    </div>
+    <div class="login-sub">ERP OS — Ouvrier</div>
+    <div class="login-tag">Conserverie artisanale · Cognac</div>
+    <div id="login-step1">
+      <div class="login-who">Qui êtes-vous ?</div>
+      <div class="user-grid" id="login-user-grid">
+        <div class="ucard" style="opacity:.5;pointer-events:none;grid-column:1/-1">
+          <div class="ucard-avatar" style="background:#242220;border-color:#363432;color:#555;margin:0 auto">…</div>
+          <div class="ucard-name" style="color:#444">Chargement…</div>
+        </div>
+      </div>
+    </div>
+    <div id="login-step2" style="display:none">
+      <button class="login-back" onclick="backToUsers()">← Changer</button>
+      <div class="pin-user-info">
+        <div class="ucard-avatar ucard-avatar-lg" id="pin-user-avatar" style="background:#242220;border-color:#363432;color:#555">?</div>
+        <div class="pin-user-name" id="pin-user-name">—</div>
+        <div class="pin-user-role-tag" id="pin-user-role"></div>
+      </div>
+      <div class="pin-dots">
+        <div class="pin-dot" id="d0"></div><div class="pin-dot" id="d1"></div>
+        <div class="pin-dot" id="d2"></div><div class="pin-dot" id="d3"></div>
+      </div>
+      <div class="pin-pad">
+        <button class="pin-btn" onclick="pinPress('1')">1</button>
+        <button class="pin-btn" onclick="pinPress('2')">2</button>
+        <button class="pin-btn" onclick="pinPress('3')">3</button>
+        <button class="pin-btn" onclick="pinPress('4')">4</button>
+        <button class="pin-btn" onclick="pinPress('5')">5</button>
+        <button class="pin-btn" onclick="pinPress('6')">6</button>
+        <button class="pin-btn" onclick="pinPress('7')">7</button>
+        <button class="pin-btn" onclick="pinPress('8')">8</button>
+        <button class="pin-btn" onclick="pinPress('9')">9</button>
+        <button class="pin-btn pin-btn-del" onclick="pinClear()">⌫</button>
+        <button class="pin-btn" onclick="pinPress('0')">0</button>
+        <button class="pin-btn pin-btn-ok" onclick="pinSubmit()">↵</button>
+      </div>
+      <div class="login-err" id="loginErr"></div>
+    </div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="tlogo">🏭 Maison 41</div>
+    <span class="tuser-name" id="tuserName">—</span>
+    <div class="net-dot" id="netDot" title="Connexion"></div>
+    <button class="tbtn tbtn-red" onclick="navigate('haccp')" title="HACCP urgent">⚠️</button>
+    <button class="tbtn" onclick="doLogout()">⏻</button>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- ─── VIEW LABO ─── -->
+    <div class="view active" id="view-labo">
+      <div class="ph">
+        <div class="ph-left">
+          <div class="ph-title">Labo · Lots</div>
+          <div class="ph-sub">Planning de production</div>
+        </div>
+      </div>
+      <div class="kpi-grid">
+        <div class="kpi"><div class="kpi-label">Lots aujourd'hui</div><div class="kpi-val" id="lk-today">—</div></div>
+        <div class="kpi"><div class="kpi-label">Bocaux planifiés</div><div class="kpi-val" id="lk-bocaux">—</div></div>
+      </div>
+      <button class="btn btn-primary btn-lg" onclick="openLotModal({})" style="margin-bottom:16px">+ Nouveau lot</button>
+      <div class="tbl-wrap">
+        <div class="tbl-header"><span class="tbl-title">Planning</span></div>
+        <div id="labo-list"><div class="empty-state"><div class="es-icon">🏭</div><div class="es-text">Chargement…</div></div></div>
+      </div>
+    </div>
+
+    <!-- ─── VIEW HACCP ─── -->
+    <div class="view" id="view-haccp">
+      <div class="ph">
+        <div class="ph-left"><div class="ph-title">HACCP · NC</div><div class="ph-sub">Contrôles qualité</div></div>
+      </div>
+      <div class="kpi-grid" id="haccp-kpis"></div>
+      <button class="btn btn-primary btn-lg" onclick="openModal('modal-haccp')" style="margin-bottom:16px">+ Nouveau contrôle</button>
+      <div class="tbl-wrap">
+        <table class="data"><thead><tr><th>Date</th><th>Type</th><th>Valeur</th><th>Statut</th></tr></thead>
+        <tbody id="haccp-tbody"><tr><td colspan="4"><div class="empty-state"><div class="es-icon">🛡️</div><div class="es-text">Chargement…</div></div></td></tr></tbody></table>
+      </div>
+    </div>
+
+    <!-- ─── VIEW AUTOCLAVES ─── -->
+    <div class="view" id="view-autoclaves">
+      <div class="ph">
+        <div class="ph-left"><div class="ph-title">Autoclave</div><div class="ph-sub">Timer · Cycles</div></div>
+      </div>
+      <!-- Timer toujours visible -->
+      <div style="background:var(--ink);border-radius:16px;padding:20px;margin-bottom:16px">
+        <div class="ac-timer-display" id="ac-timer-display">00:00</div>
+        <!-- Valeur stérilisatrice Fo — indicatif (z=10, Tref=121.1°C) -->
+        <div id="ac-fo-bar" style="display:none;margin-bottom:10px;background:rgba(255,255,255,.07);border-radius:10px;padding:8px 14px;text-align:center">
+          <span style="font-size:11px;color:rgba(255,255,255,.5);letter-spacing:.05em;text-transform:uppercase">Fo stérilisateur</span>
+          <div style="display:flex;align-items:baseline;justify-content:center;gap:6px;margin-top:2px">
+            <span id="ac-fo-val" style="font-size:26px;font-weight:300;font-family:'DM Mono',monospace;color:#5ddb8a">0.00</span>
+            <span style="font-size:12px;color:rgba(255,255,255,.5)">min · cible ≥ 3</span>
+          </div>
+          <div id="ac-fo-status" style="font-size:11px;margin-top:3px;color:rgba(255,255,255,.5)">Saisir T° pour activer le calcul</div>
+        </div>
+        <div class="timer-target" id="ac-timer-target" style="color:rgba(255,255,255,.5)">Saisir la durée cible ci-dessous</div>
+        <div class="timer-bar">
+          <button class="btn btn-green btn-sm" id="ac-timer-start" onclick="acTimerStart()">▶ Démarrer</button>
+          <button class="btn btn-secondary btn-sm" id="ac-timer-pause" onclick="acTimerPause()" disabled>⏸ Pause</button>
+          <button class="btn btn-ghost btn-sm" onclick="acTimerReset()">↺ Reset</button>
+        </div>
+      </div>
+      <button class="btn btn-primary btn-lg" onclick="openModal('modal-autoclave')" style="margin-bottom:16px">+ Nouveau cycle</button>
+      <div class="kpi-grid" id="autoclaves-kpis"></div>
+      <div class="tbl-wrap">
+        <div class="tbl-header"><span class="tbl-title">Historique cycles</span></div>
+        <table class="data"><thead><tr><th>Date</th><th>N° Lot</th><th>T°max</th><th>Durée</th><th>Statut</th></tr></thead>
+        <tbody id="autoclaves-tbody"><tr><td colspan="5"><div class="empty-state"><div class="es-icon">🔥</div><div class="es-text">Chargement…</div></div></td></tr></tbody></table>
+      </div>
+    </div>
+
+    <!-- ─── VIEW TRACABILITE ─── -->
+    <div class="view" id="view-tracabilite">
+      <div class="ph">
+        <div class="ph-left"><div class="ph-title">Traçabilité</div><div class="ph-sub">MP · N° lots fournisseurs</div></div>
+      </div>
+      <div class="kpi-grid" id="trac-kpis"></div>
+      <div class="alert-banner alert-banner-amber" style="margin-bottom:14px">
+        📱 Photographier les étiquettes MP — l'IA extrait les données automatiquement
+      </div>
+      <div class="tbl-wrap">
+        <div class="tbl-header"><span class="tbl-title">⚠️ Lots non tracés</span></div>
+        <table class="data"><thead><tr><th>N° Lot</th><th>Recette</th><th>Date</th><th></th></tr></thead>
+        <tbody id="trac-pending-tbody"><tr><td colspan="4"><div class="empty-state"><div class="es-icon">⏳</div><div class="es-text">Chargement…</div></div></td></tr></tbody></table>
+      </div>
+      <div class="tbl-wrap">
+        <div class="tbl-header"><span class="tbl-title">✅ Archive tracés</span></div>
+        <table class="data"><thead><tr><th>N° Lot</th><th>MP</th><th>Fournisseur</th><th>DLC</th></tr></thead>
+        <tbody id="trac-archive-tbody"><tr><td colspan="4"><div class="empty-state"><div class="es-icon">📦</div><div class="es-text">Chargement…</div></div></td></tr></tbody></table>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav">
+    <div class="bnav-item active" id="bnav-labo" onclick="navigate('labo')">
+      <span class="bnav-ico">🔬</span><span>Labo</span>
+    </div>
+    <div class="bnav-item" id="bnav-haccp" onclick="navigate('haccp')">
+      <span class="bnav-ico">🧪</span><span>HACCP</span>
+    </div>
+    <div class="bnav-item" id="bnav-autoclaves" onclick="navigate('autoclaves')">
+      <span class="bnav-ico">♨️</span><span>Autoclave</span>
+    </div>
+    <div class="bnav-item" id="bnav-tracabilite" onclick="navigate('tracabilite')">
+      <span class="bnav-ico">📋</span><span>Traçabilité</span>
+    </div>
+  </nav>
+
+</div>
+
+<!-- ═══ MODAUX ═══ -->
+
+<!-- Modal Lot -->
+<!-- ─── CHECKLIST PRÉ-PRODUCTION ─────────────────────────────────────────── -->
+<div class="overlay" id="modal-preprod-checklist">
+  <div class="modal">
+    <div class="mh">
+      <div class="mh-title">✅ Checklist pré-production</div>
+      <button class="mh-close" onclick="closeModal('modal-preprod-checklist')">✕</button>
+    </div>
+    <div class="mb">
+      <p style="font-size:13px;color:var(--stone);margin-bottom:16px;line-height:1.5">
+        Vérifiez chaque point avant de démarrer le lot. Tous les points doivent être cochés.
+      </p>
+      <div id="preprod-items" style="display:flex;flex-direction:column;gap:0">
+        <!-- items injectés par JS -->
+      </div>
+      <div id="preprod-warn" style="display:none;margin-top:12px;padding:10px 14px;background:rgba(192,57,43,.08);border:1px solid rgba(192,57,43,.25);border-radius:8px;font-size:12.5px;color:var(--red)">
+        ⚠️ Cochez tous les points avant de continuer.
+      </div>
+    </div>
+    <div class="mf">
+      <button class="btn btn-ghost" onclick="closeModal('modal-preprod-checklist')">Annuler</button>
+      <button class="btn btn-primary" id="preprod-ok-btn" onclick="confirmPreprodChecklist()">Démarrer le lot →</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="modal-lot">
+  <div class="modal">
+    <div class="mh">
+      <div class="mh-title">Nouveau lot</div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <button id="lot-rapide-toggle" onclick="toggleLotRapide()" title="Masquer les champs non essentiels">⚡ Rapide</button>
+        <button class="mh-close" onclick="closeModal('modal-lot')">✕</button>
+      </div>
+    </div>
+    <div class="mb">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="fl">Date <span class="req">*</span></label>
+          <input type="date" id="lot-date">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="fl">Recette <span class="req">*</span></label>
+          <select id="lot-recette" onchange="onLotRecetteChange()">
+            <option value="">-- Choisir --</option>
+          </select>
+        </div>
+      </div>
+      <div id="lot-bareme-badge" style="display:none;margin-bottom:12px">
+        <span class="bareme-badge" id="lot-bareme-text"></span>
+      </div>
+      <div class="form-row c2 lot-rapide-hide">
+        <div class="form-group">
+          <label class="fl">Format <span class="req">*</span></label>
+          <select id="lot-format" onchange="calcBocaux()">
+            <option value="">-- Format --</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="fl">Autoclave <span class="req">*</span></label>
+          <select id="lot-autoclave" onchange="calcBocaux()">
+            <option value="">-- Choisir --</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row c2 lot-rapide-hide">
+        <div class="form-group">
+          <label class="fl">Fraction</label>
+          <select id="lot-fraction" onchange="calcBocaux()">
+            <option value="Complet">Complet</option>
+            <option value="1/2">1/2</option>
+            <option value="1/3">1/3</option>
+            <option value="1/4">1/4</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="fl">Bocaux réels</label>
+          <input type="number" id="lot-bocaux-reels" inputmode="decimal" placeholder="0">
+        </div>
+      </div>
+      <div id="lot-cap-display" class="lot-rapide-hide" style="display:none;background:var(--ampp);border-radius:10px;padding:12px 14px;margin-bottom:10px;align-items:center;justify-content:space-between">
+        <div>
+          <div style="font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--stone)" id="lot-cap-lab">Bocaux planifiés</div>
+          <div style="font-size:28px;font-weight:300;font-family:'Fraunces',serif;color:var(--amber)" id="lot-bocaux-calc">—</div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="fl">T° cœur mesurée (CCP1)</label>
+          <input type="number" id="lot-temp" inputmode="decimal" placeholder="≥ 115°C" step="0.1">
+          <div class="form-hint" id="lot-temp-hint">Barème de stérilisation de la recette</div>
+        </div>
+      </div>
+      <div class="form-row lot-rapide-hide">
+        <div class="form-group">
+          <label class="fl">Opérateur</label>
+          <input type="text" id="lot-operateur">
+        </div>
+      </div>
+    </div>
+    <div class="mf">
+      <button class="btn btn-ghost" onclick="closeModal('modal-lot')">Annuler</button>
+      <button class="btn btn-primary" id="lot-save-btn" onclick="saveLot()">💾 Planifier le lot</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal HACCP -->
+<div class="overlay" id="modal-haccp">
+  <div class="modal">
+    <div class="mh">
+      <div class="mh-title">Contrôle HACCP</div>
+      <button class="mh-close" onclick="closeModal('modal-haccp')">✕</button>
+    </div>
+    <div class="mb">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="fl">Date <span class="req">*</span></label>
+          <input type="date" id="h-date">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="fl">Type de contrôle</label>
+          <select id="h-type" onchange="onHTypeChange()">
+            <option value="CCP1 Température">CCP1 Température stérilisation</option>
+            <option value="CCP2 pH">CCP2 pH préparation</option>
+            <option value="Nettoyage">Nettoyage / désinfection</option>
+            <option value="Réception MP">Réception MP</option>
+            <option value="Autre">Autre</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="fl">Description / Point CCP <span class="req">*</span></label>
+          <textarea id="h-desc" rows="2" placeholder="Décrire le point de contrôle…"></textarea>
+        </div>
+      </div>
+      <div class="form-row c2">
+        <div class="form-group">
+          <label class="fl" id="h-val-label">Valeur mesurée <span class="req" id="h-val-req" style="display:none">*</span></label>
+          <input type="number" id="h-val" inputmode="decimal" step="0.1" placeholder="ex: 117.5">
+        </div>
+        <div class="form-group">
+          <label class="fl" id="h-lim-label">Limite critique <span class="req" id="h-lim-req" style="display:none">*</span></label>
+          <input type="number" id="h-lim" inputmode="decimal" step="0.1" placeholder="ex: 115">
+        </div>
+      </div>
+      <div id="h-ccp1-hint" style="display:none;background:rgba(192,57,43,.07);border:.5px solid rgba(192,57,43,.25);border-radius:8px;padding:8px 12px;font-size:12px;color:#7a1a14;margin-bottom:8px">
+        🌡️ CCP1 — seuil minimum : <strong id="h-ccp1-seuil">115°C</strong>. Valeur et limite obligatoires.
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="fl">Action corrective</label>
+          <input type="text" id="h-action" placeholder="Si NC : action prise…">
+        </div>
+      </div>
+      <div class="form-row c2">
+        <div class="form-group">
+          <label class="fl">Responsable</label>
+          <input type="text" id="h-resp">
+        </div>
+        <div class="form-group">
+          <label class="fl">Date clôture NC</label>
+          <input type="date" id="h-cloture">
+        </div>
+      </div>
+    </div>
+    <div class="mf">
+      <button class="btn btn-ghost" onclick="closeModal('modal-haccp')">Annuler</button>
+      <button class="btn btn-primary" id="h-save-btn" onclick="saveHACCP_form()">💾 Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Autoclave -->
+<div class="overlay" id="modal-autoclave">
+  <div class="modal">
+    <div class="mh">
+      <div class="mh-title">Cycle Autoclave</div>
+      <button class="mh-close" onclick="closeModal('modal-autoclave')">✕</button>
+    </div>
+    <div class="mb">
+      <div class="form-row c2">
+        <div class="form-group">
+          <label class="fl">Date <span class="req">*</span></label>
+          <input type="date" id="ac-date">
+        </div>
+        <div class="form-group">
+          <label class="fl">Autoclave <span class="req">*</span></label>
+          <select id="ac-autoclave"></select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="fl">N° Lot</label>
+          <input type="text" id="ac-lot" placeholder="LOT-AAAAMMJJ-NNN">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="fl">Recette</label>
+          <select id="ac-recette">
+            <option value="">-- Choisir --</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row c2">
+        <div class="form-group">
+          <label class="fl">Format</label>
+          <select id="ac-format">
+            <option value="RR100-290">RR100-290</option>
+            <option value="RR100-580">RR100-580</option>
+            <option value="RR100-850">RR100-850</option>
+            <option value="W60-050">W60-050</option>
+            <option value="W60-080">W60-080</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="fl">Nb bocaux</label>
+          <input type="number" id="ac-bocaux" inputmode="decimal" placeholder="0">
+        </div>
+      </div>
+      <div class="form-row c3">
+        <div class="form-group">
+          <label class="fl">T° max CCP1 (°C) <span class="req">*</span></label>
+          <input type="number" id="ac-temp" inputmode="decimal" step="0.1" placeholder="≥115°C" oninput="checkAcTemp()">
+        </div>
+        <div class="form-group">
+          <label class="fl">Durée réelle (min)</label>
+          <input type="number" id="ac-duree" inputmode="decimal" placeholder="min" oninput="acTimerSetTarget()">
+        </div>
+        <div class="form-group">
+          <label class="fl">Pression (bar)</label>
+          <input type="number" id="ac-pression" inputmode="decimal" step="0.1" min="0" placeholder="bar">
+        </div>
+      </div>
+      <div id="ac-temp-status" style="font-size:13px;font-weight:600;margin-bottom:8px"></div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="fl">Notes</label>
+          <textarea id="ac-notes" rows="2" placeholder="Observations…"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="mf">
+      <button class="btn btn-ghost" onclick="closeModal('modal-autoclave')">Annuler</button>
+      <button class="btn btn-primary" id="ac-save-btn" onclick="saveAutoclave_form()">💾 Enregistrer cycle</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Tracabilité MP -->
+<div class="overlay" id="modal-tracabilite">
+  <div class="modal">
+    <div class="mh">
+      <div>
+        <div class="mh-title">📷 Traçabilité MP</div>
+        <div style="font-size:11px;color:var(--slatm);margin-top:2px">Lot <strong id="trac-lot-num">—</strong> · <span id="trac-recette">—</span></div>
+      </div>
+      <button class="mh-close" onclick="closeModal('modal-tracabilite')">✕</button>
+    </div>
+    <div class="mb">
+      <div class="form-row c2" style="margin-bottom:12px">
+        <div class="form-group">
+          <label class="fl">Opérateur</label>
+          <input type="text" id="trac-operateur">
+        </div>
+        <div class="form-group">
+          <label class="fl">Date prod.</label>
+          <input type="date" id="trac-date-prod">
+        </div>
+      </div>
+      <div id="trac-ingrs-list">
+        <div class="empty-state"><div class="es-icon">📦</div><div class="es-text">Sélectionner un lot…</div></div>
+      </div>
+      <div id="trac-progress" style="display:none;text-align:center;padding:8px;font-size:12px;color:var(--slatm)"></div>
+    </div>
+    <div class="mf">
+      <button class="btn btn-ghost" onclick="closeModal('modal-tracabilite')">Annuler</button>
+      <button class="btn btn-primary" id="trac-save-btn" onclick="saveTracabilite_form()">💾 Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- NC Bannière (masquée par défaut) -->
+<div class="nc-banner" id="nc-banner" style="display:none">
+  <h1>⛔ NON-CONFORMITÉ CCP1</h1>
+  <p id="nc-banner-msg">Température insuffisante détectée — cycle invalidé.</p>
+  <button class="btn-nc-ack" onclick="acknowledgeNC()">J'accuse réception</button>
+</div>
+
+<div id="toastContainer"></div>
+
+<!-- ═══ JAVASCRIPT ═══ -->
+<script>
+'use strict';
+
+// ─── CONSTANTES ───────────────────────────────────────────────
+const FRACS={'Complet':[1,1],'1/2':[1,2],'1/3':[1,3],'1/4':[1,4]};
+const CAP_AUTOCLAVES_FALLBACK={
+  A:{'RR100-290':96,'RR100-580':48,'RR100-850':24,'W60-050':192,'W60-080':144},
+  B:{'RR100-290':72,'RR100-580':36,'RR100-850':18,'W60-050':144,'W60-080':108}
+};
+function getCapAutoclavesDyn(){
+  const auts=(D.parcMachine||[]).filter(m=>m['Type']==='Autoclave'&&m['Statut']!=='Inactif');
+  if(!auts.length)return CAP_AUTOCLAVES_FALLBACK;
+  const res={};
+  auts.forEach(m=>{
+    const id=String(m['ID']||m['Nom']||'').trim();if(!id)return;
+    res[id]={'RR100-290':parseInt(m['Cap_RR290'])||0,'RR100-580':parseInt(m['Cap_RR580'])||0,
+      'RR100-850':parseInt(m['Cap_RR850'])||0,'W60-050':parseInt(m['Cap_W050'])||0,'W60-080':parseInt(m['Cap_W080'])||0};
+  });
+  return res;
+}
+
+// ─── STATE ────────────────────────────────────────────────────
+const D={
+  user:null,recettes:[],prixVente:[],mp:[],clients:[],config:{},
+  planning:[],stock:[],haccp:[],parcMachine:[],tracabilite:[],autoclaves:[],
+  appDataLoaded:false,lastFetch:null
+};
+
+// ─── HELPERS ──────────────────────────────────────────────────
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function fmt(v,suf){const n=parseFloat(v)||0;return n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,' ')+(suf?' '+suf:'');}
+function fmtDate(d){if(!d)return'—';try{const dt=new Date(d);if(isNaN(dt))return String(d);return dt.toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit',year:'2-digit'});}catch{return String(d);}}
+function isToday(d){if(!d)return false;const t=new Date().toISOString().split('T')[0];return String(d).startsWith(t);}
+function isThisWeek(d){if(!d)return false;const now=new Date(),start=new Date(now);start.setDate(now.getDate()-now.getDay());const end=new Date(start);end.setDate(start.getDate()+7);const dt=new Date(d);return dt>=start&&dt<=end;}
+function setBtnLoad(id,loading,txt){const el=document.getElementById(id);if(!el)return;el.disabled=loading;if(txt)el.textContent=(loading?'⏳ ':'')+txt;}
+function toast(msg,type='info'){
+  const c=document.getElementById('toastContainer');if(!c)return;
+  const el=document.createElement('div');
+  el.className='toast toast-'+(type==='error'?'error':type==='success'?'success':type==='warn'?'warn':'info');
+  el.textContent=msg;c.appendChild(el);
+  setTimeout(()=>el.remove(),3200);
+}
+function openModal(id){const el=document.getElementById(id);if(el)el.classList.add('open');}
+function closeModal(id){const el=document.getElementById(id);if(el)el.classList.remove('open');}
+
+// ─── LOADER ───────────────────────────────────────────────────
+function _hideLoader(){
+  const l=document.getElementById('_loader');if(l)l.style.display='none';
+}
+
+// ─── NC BANNIÈRE ──────────────────────────────────────────────
+var _ncPending=false;
+var _ncTempValue=0;
+function showNCBanner(msg,tempVal){
+  _ncPending=true;
+  _ncTempValue=tempVal||0;
+  const b=document.getElementById('nc-banner');
+  document.getElementById('nc-banner-msg').textContent=msg||'Non-conformité détectée.';
+  b.style.display='flex';
+  if(navigator.vibrate)navigator.vibrate([500,200,500,200,500]);
+}
+function acknowledgeNC(){
+  _ncPending=false;
+  document.getElementById('nc-banner').style.display='none';
+  // Ouvrir HACCP pré-rempli — enregistrement obligatoire
+  const typeEl=document.getElementById('h-type');
+  if(typeEl){
+    typeEl.value='CCP1 Température';
+    onHTypeChange();
+  }
+  const cfg=D.config||{};
+  const tempMin=parseFloat(cfg['Autoclave temperature minimale (C)']||115);
+  if(_ncTempValue>0){
+    const valEl=document.getElementById('h-val');
+    if(valEl)valEl.value=_ncTempValue;
+  }
+  const limEl=document.getElementById('h-lim');
+  if(limEl)limEl.value=tempMin;
+  const descEl=document.getElementById('h-desc');
+  if(descEl)descEl.value='NC automatique — température CCP1 insuffisante détectée au cycle autoclave.';
+  const dateEl=document.getElementById('h-date');
+  if(dateEl)dateEl.value=new Date().toISOString().split('T')[0];
+  openModal('modal-haccp');
+  toast('⚠️ Enregistrer la NC HACCP avant de continuer','warn');
+}
+
+// ─── LOGIN ────────────────────────────────────────────────────
+var pin='',_selectedUser=null;
+var _ROLE_COLORS={'Gérant':'#c8820a','Admin':'#c8820a','Ouvrier':'#1a5a9a','Vendeuse':'#1a7a4a','Compta':'#6a3a9a'};
+function _roleColor(r){return _ROLE_COLORS[r]||'#5a5652';}
+function _initials(n){var p=(n||'').trim().split(/\s+/);return p.length>=2?(p[0][0]+p[p.length-1][0]).toUpperCase():(n||'?').substring(0,2).toUpperCase();}
+
+function renderUserGrid(){
+  var users=(window._USERS_RAW||[]).filter(function(u){
+    var a=String(u['Actif']||u.actif||'oui').toLowerCase();return a!=='non'&&a!=='false'&&a!=='0';
+  });
+  var grid=document.getElementById('login-user-grid');if(!grid)return;
+  if(!users.length)users=[{Nom:'Connexion','Rôle':''}];
+  grid.innerHTML=users.map(function(u){
+    var nom=u['Nom']||u.nom||'?',role=u['Rôle']||u['Role']||u.role||'';
+    var col=_roleColor(role),ini=_initials(nom);
+    return '<div class="ucard" onclick="selectUser('+JSON.stringify(nom)+','+JSON.stringify(role)+')">'
+      +'<div class="ucard-avatar" style="background:'+col+'20;border-color:'+col+'50;color:'+col+'">'+ini+'</div>'
+      +'<div class="ucard-name">'+nom+'</div>'+(role?'<div class="ucard-role">'+role+'</div>':'')+'</div>';
+  }).join('');
+}
+function selectUser(nom,role){
+  _selectedUser={nom,role};
+  var col=_roleColor(role);
+  var av=document.getElementById('pin-user-avatar');
+  if(av){av.style.background=col+'20';av.style.borderColor=col+'50';av.style.color=col;av.textContent=_initials(nom);}
+  var nm=document.getElementById('pin-user-name');if(nm)nm.textContent=nom;
+  var rl=document.getElementById('pin-user-role');if(rl)rl.textContent=role;
+  document.getElementById('login-step1').style.display='none';
+  document.getElementById('login-step2').style.display='';
+  pin='';updDots();document.getElementById('loginErr').textContent='';
+}
+function backToUsers(){
+  document.getElementById('login-step2').style.display='none';
+  document.getElementById('login-step1').style.display='';
+  _selectedUser=null;pin='';updDots();
+}
+function pinPress(d){if(pin.length>=4)return;pin+=d;updDots();if(pin.length===4)setTimeout(pinSubmit,150);}
+function pinClear(){pin=pin.slice(0,-1);updDots();}
+function updDots(){for(var i=0;i<4;i++)document.getElementById('d'+i).classList.toggle('filled',i<pin.length);}
+window.pinPress=pinPress;window.pinClear=pinClear;window.selectUser=selectUser;window.backToUsers=backToUsers;window.renderUserGrid=renderUserGrid;
+
+function pinSubmit(){
+  if(!pin)return;
+  document.getElementById('loginErr').textContent='Vérification…';
+  var ps=pin;pin='';updDots();
+  if(typeof google!=='undefined'&&google.script&&google.script.run){
+    google.script.run
+      .withSuccessHandler(function(user){
+        if(user){
+          if(_selectedUser&&_selectedUser.nom!=='Connexion'&&String(user['Nom']||'').trim()!==String(_selectedUser.nom||'').trim()){
+            document.getElementById('loginErr').textContent='PIN incorrect pour '+_selectedUser.nom;
+          }else onLoginOK(user);
+        }else document.getElementById('loginErr').textContent='PIN incorrect';
+      })
+      .withFailureHandler(function(){document.getElementById('loginErr').textContent='Hors-ligne';})
+      .checkLogin(ps);
+  }else document.getElementById('loginErr').textContent='Mode hors-ligne';
+}
+window.pinSubmit=pinSubmit;
+
+function onLoginOK(user){
+  if(!user){document.getElementById('loginErr').textContent='PIN incorrect';return;}
+  D.user=user;
+  document.getElementById('tuserName').textContent=(user['Nom']||'')+(user['Rôle']||user['Role']?' · '+(user['Rôle']||user['Role']):'');
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('app').classList.add('visible');
+  setDates();
+  navigate('labo');
+  _checkOnboarding('ouvrier');
+}
+function doLogout(){
+  D.user=null;pin='';_selectedUser=null;
+  document.getElementById('app').classList.remove('visible');
+  document.getElementById('loginScreen').style.display='flex';
+  var s1=document.getElementById('login-step1'),s2=document.getElementById('login-step2');
+  if(s1)s1.style.display='';if(s2)s2.style.display='none';updDots();
+}
+function setDates(){
+  const t=new Date().toISOString().split('T')[0];
+  ['h-date','ac-date','lot-date','trac-date-prod'].forEach(id=>{const el=document.getElementById(id);if(el&&el.type==='date')el.value=t;});
+}
+
+// ─── DATA LOADING ────────────────────────────────────────────
+function onAppDataLoaded(d){
+  if(!d||d.error){toast('❌ Données: '+(d&&d.error||'erreur'),'error');D.appDataLoaded=true;return;}
+  D.recettes=d.recettes||[];D.prixVente=d.prixVente||[];D.mp=d.mp||[];
+  D.clients=d.clients||[];D.config=d.config||{};
+  D.appDataLoaded=true;D.lastFetch=new Date().toISOString();
+  populateDropdowns();
+  // Refresh active view
+  const active=document.querySelector('.view.active');
+  if(active)onViewLoad(active.id.replace('view-',''));
+}
+function onProdDataLoaded(d){
+  if(!d||d.error)return;
+  D.planning=d.planning||[];D.stock=d.stock||[];D.haccp=d.haccp||[];
+  D.parcMachine=d.parcMachine||[];D.autoclaves=d.autoclaves||[];
+  D.tracabilite=d.tracabilite||[];
+  populateAutoclaveDropdowns();
+  const active=document.querySelector('.view.active');
+  if(active)onViewLoad(active.id.replace('view-',''));
+}
+function refreshData(){
+  toast('Synchronisation…','info');
+  if(typeof google!=='undefined'&&google.script){
+    google.script.run.withSuccessHandler(onAppDataLoaded).withFailureHandler(()=>toast('Erreur sync','error')).getAllAppData();
+    google.script.run.withSuccessHandler(onProdDataLoaded).withFailureHandler(()=>{}).getProductionData();
+  }
+}
+setInterval(function(){
+  if(typeof google!=='undefined'&&google.script&&D.lastFetch){
+    google.script.run.withSuccessHandler(function(ts){
+      if(ts&&ts>D.lastFetch){refreshData();D.lastFetch=ts;}
+    }).withFailureHandler(()=>{}).getLastWrite();
+  }
+},3*60*1000);
+
+function populateDropdowns(){
+  const opts=D.recettes.map(r=>`<option value="${esc(r.ref)}|${esc(r.nom)}|${esc(r.gamme)}">${esc(r.ref)} — ${esc(r.nom)}</option>`).join('');
+  ['lot-recette'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML='<option value="">-- Choisir --</option>'+opts;});
+  // Recette for autoclave
+  const acR=document.getElementById('ac-recette');
+  if(acR)acR.innerHTML='<option value="">-- Recette --</option>'+D.recettes.map(r=>`<option value="${esc(r.nom)}">${esc(r.ref)} — ${esc(r.nom)}</option>`).join('');
+}
+function populateAutoclaveDropdowns(){
+  const auts=(D.parcMachine||[]).filter(m=>m['Type']==='Autoclave'&&m['Statut']!=='Inactif');
+  const opts=auts.length?auts.map(m=>`<option value="${esc(m['ID']||m['Nom'])}">${esc(m['Nom'])}</option>`).join('')
+    :'<option value="A">Autoclave A</option><option value="B">Autoclave B</option>';
+  const la=document.getElementById('lot-autoclave');if(la)la.innerHTML='<option value="">-- Choisir --</option>'+opts;
+  const ac=document.getElementById('ac-autoclave');if(ac)ac.innerHTML=opts;
+}
+
+// ─── NAVIGATION ───────────────────────────────────────────────
+function navigate(v){
+  document.querySelectorAll('.view').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.bnav-item').forEach(el=>el.classList.remove('active'));
+  const vEl=document.getElementById('view-'+v);if(vEl)vEl.classList.add('active');
+  const nb=document.getElementById('bnav-'+v);if(nb)nb.classList.add('active');
+  onViewLoad(v);
+}
+function onViewLoad(v){
+  switch(v){
+    case 'labo':renderLabo();break;
+    case 'haccp':renderHACCP();break;
+    case 'autoclaves':renderAutoclaves();break;
+    case 'tracabilite':loadTracabilite();break;
+  }
+}
+
+// ─── LABO ─────────────────────────────────────────────────────
+// ─── CHECKLIST PRÉ-PRODUCTION ─────────────────────────────────────────────
+// 5 points obligatoires avant tout nouveau lot.
+// Si tous cochés → HACCP "Pré-prod OK" sauvegardé + ouverture modal-lot.
+var _preprodLotOpts={};
+var PREPROD_ITEMS=[
+  {id:'pp1',label:'Zone de production nettoyée et désinfectée',icon:'🧹'},
+  {id:'pp2',label:'Matières premières vérifiées (étiquettes, DLC, intégrité)',icon:'📦'},
+  {id:'pp3',label:'Matériel et ustensiles propres et disponibles',icon:'🔧'},
+  {id:'pp4',label:'Tenue de travail conforme (charlotte, tablier, gants)',icon:'🦺'},
+  {id:'pp5',label:'Autoclave vérifié (joint, manomètre, eau)',icon:'🔥'}
+];
+
+function openPreprodChecklist(opts){
+  _preprodLotOpts=opts||{};
+  // Injecter les items
+  document.getElementById('preprod-items').innerHTML=PREPROD_ITEMS.map(function(it){
+    return`<label style="display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--div);cursor:pointer;-webkit-tap-highlight-color:transparent" for="${it.id}">
+      <input type="checkbox" id="${it.id}" onchange="checkPreprodProgress()"
+        style="width:22px;height:22px;flex-shrink:0;accent-color:var(--accent);cursor:pointer">
+      <span style="font-size:14px">${it.icon}</span>
+      <span style="font-size:13.5px;line-height:1.4">${it.label}</span>
+    </label>`;
+  }).join('');
+  document.getElementById('preprod-warn').style.display='none';
+  openModal('modal-preprod-checklist');
+}
+
+function checkPreprodProgress(){
+  const all=PREPROD_ITEMS.every(function(it){
+    return document.getElementById(it.id)&&document.getElementById(it.id).checked;
+  });
+  document.getElementById('preprod-ok-btn').style.opacity=all?'1':'0.5';
+}
+
+function confirmPreprodChecklist(){
+  const unchecked=PREPROD_ITEMS.filter(function(it){
+    return !(document.getElementById(it.id)&&document.getElementById(it.id).checked);
+  });
+  if(unchecked.length>0){
+    document.getElementById('preprod-warn').style.display='block';
+    return;
+  }
+  document.getElementById('preprod-warn').style.display='none';
+  closeModal('modal-preprod-checklist');
+  // Sauvegarder HACCP "Pré-prod OK" en arrière-plan (non bloquant)
+  const now=new Date().toISOString().split('T')[0];
+  const operator=(D.user&&D.user.Nom)||'';
+  if(typeof google!=='undefined'&&google.script){
+    google.script.run
+      .withSuccessHandler(function(){})
+      .withFailureHandler(function(){})
+      .saveHACCP({
+        date:now,
+        type:'Contrôle pré-production',
+        description:'Checklist 5 points validée avant démarrage lot — '+PREPROD_ITEMS.map(function(i){return i.label;}).join(' | '),
+        valeur:5,limite:5,
+        action:'',responsable:operator,
+        notes:'Auto — checklist pré-production'
+      });
+  }
+  // Ouvrir le modal lot avec les options d'origine
+  _openLotModalDirect(_preprodLotOpts);
+}
+
+function openLotModal(opts){
+  // Passe par la checklist sauf si déjà validée dans la même session
+  openPreprodChecklist(opts);
+}
+
+function _openLotModalDirect(opts){
+  openModal('modal-lot');
+  document.getElementById('lot-date').value=new Date().toISOString().split('T')[0];
+  document.getElementById('lot-cap-display').style.display='none';
+  if(opts&&opts.recette){
+    const sel=document.getElementById('lot-recette');
+    for(const o of sel.options)if(o.value.startsWith(opts.recette+'|')){sel.value=o.value;break;}
+    onLotRecetteChange();
+  }
+  if(D.user&&D.user['Nom'])document.getElementById('lot-operateur').value=D.user['Nom'];
+}
+function onLotRecetteChange(){
+  const parts=(document.getElementById('lot-recette').value||'').split('|');
+  const ref=parts[0];const recette=D.recettes.find(r=>r.ref===ref);
+  const gamme=recette?recette.gamme:'';
+  const formats=[...new Set(D.prixVente.filter(p=>!gamme||p.gamme===gamme).map(p=>p.format).filter(Boolean))];
+  const fmtSel=document.getElementById('lot-format');
+  const mainFmt=recette?recette.format:'';
+  fmtSel.innerHTML='<option value="">-- Format --</option>'+(formats.length?formats:['RR100-290','RR100-580','RR100-850','W60-050','W60-080']).map(f=>`<option value="${esc(f)}" ${f===mainFmt?'selected':''}>${esc(f)}</option>`).join('');
+  const tempCCP1=recette?parseFloat(recette.tempCCP1||115):115;
+  const dureeBareme=recette?parseInt(recette.dureeBareme||0):0;
+  const badge=document.getElementById('lot-bareme-badge');
+  const badgeTxt=document.getElementById('lot-bareme-text');
+  if(recette&&ref){
+    badge.style.display='block';
+    badgeTxt.textContent=`Barème CCP1 : ${tempCCP1}°C / ${dureeBareme}min`;
+  }else badge.style.display='none';
+  document.getElementById('lot-temp').placeholder=`Mesure ≥ ${tempCCP1}°C`;
+  document.getElementById('lot-temp-hint').textContent=`Barème : ${ref||'recette'} — ${tempCCP1}°C minimum${dureeBareme?' / '+dureeBareme+' min':''}`;
+  calcBocaux();
+}
+function calcBocaux(){
+  const autoclave=document.getElementById('lot-autoclave').value;
+  const format=document.getElementById('lot-format').value;
+  const fraction=document.getElementById('lot-fraction').value;
+  const capDiv=document.getElementById('lot-cap-display');
+  if(!autoclave||!format){capDiv.style.display='none';return;}
+  const CAP=getCapAutoclavesDyn();const cap=CAP[autoclave];
+  if(!cap){capDiv.style.display='none';return;}
+  const fk=format.replace(/\s/g,'');const fullCap=cap[fk]||cap[format]||0;
+  if(!fullCap){capDiv.style.display='none';return;}
+  const fr=FRACS[fraction]||[1,1];const bocaux=Math.floor(fullCap*fr[0]/fr[1]);
+  capDiv.style.display='flex';
+  document.getElementById('lot-bocaux-calc').textContent=bocaux;
+  const acLabel=(D.parcMachine||[]).find(m=>(m['ID']||m['Nom'])===autoclave);
+  const acName=acLabel?acLabel['Nom']:autoclave;
+  document.getElementById('lot-cap-lab').textContent=`${acName} · ${format} · ${fraction} → ${bocaux} bocaux`;
+}
+function renderLabo(){
+  const data=D.planning;
+  document.getElementById('lk-today').textContent=data.filter(l=>isToday(l['Date']||l.date)).length;
+  document.getElementById('lk-bocaux').textContent=data.filter(l=>isThisWeek(l['Date']||l.date)).reduce((s,l)=>s+(parseInt(l['Bocaux Planifies']||l.bocauxPlan||0)),0);
+  const stag={'OK':'tag-green','NC':'tag-red','Planifié':'tag-blue','En cours':'tag-amber','Validé':'tag-green','En production':'tag-amber'};
+  if(!data.length){
+    document.getElementById('labo-list').innerHTML='<div class="empty-state"><div class="es-icon">🏭</div><div class="es-text">Aucun lot planifié</div></div>';return;
+  }
+  document.getElementById('labo-list').innerHTML='<div style="padding:4px 0">'+data.slice(0,40).map(l=>{
+    const statut=l['Statut']||'Planifié';
+    const temp=parseFloat(l['T coeur (C)']||l.tempCoeur||0);
+    const cfg=D.config||{};
+    const tempMin=parseFloat(cfg['Autoclave temperature minimale (C)']||115);
+    const numLot=l['N Lot (auto)']||l['N Lot']||l['Num Lot']||'—';
+    return`<div class="lot-card">
+      <div class="lot-card-header">
+        <div>
+          <span class="lot-num">${esc(numLot)}</span>
+          <div class="lot-recette" style="margin-top:4px">${esc(l['Recette']||'')}</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          ${l['URL Photo Produit']?`<a href="${esc(l['URL Photo Produit'])}" target="_blank" title="Voir photo produit fini" style="font-size:18px;text-decoration:none">🖼️</a>`:''}
+          <span class="tag ${stag[statut]||'tag-gray'}">${esc(statut)}</span>
+          <label title="Photographier le produit fini" style="cursor:pointer;font-size:18px;line-height:1;padding:2px">
+            📷<input type="file" accept="image/*" capture="environment" style="display:none" onchange="uploadLotPhoto(this,'${esc(numLot)}')">
+          </label>
+        </div>
+      </div>
+      <div class="lot-meta">
+        ${fmtDate(l['Date']||'')} · ${esc(l['Format Weck']||l.format||'')} · ${esc(l['Autoclave']||'')}
+        ${temp?` · <span style="color:${temp>=tempMin?'var(--green)':'var(--red)'};font-weight:600">${temp}°C</span>`:''}
+      </div>
+    </div>`;
+  }).join('')+'</div>';
+}
+function saveLot(){
+  const recette=document.getElementById('lot-recette').value;
+  const date=document.getElementById('lot-date').value;
+  const rapide=document.body.classList.contains('lot-rapide');
+  // Mode rapide : auto-sélectionner premier format/autoclave si vide
+  if(rapide){
+    const fmt=document.getElementById('lot-format');
+    if(fmt&&!fmt.value&&fmt.options.length>1)fmt.value=fmt.options[1].value;
+    const ac=document.getElementById('lot-autoclave');
+    if(ac&&!ac.value&&ac.options.length>1)ac.value=ac.options[1].value;
+  }
+  const format=document.getElementById('lot-format').value;
+  const autoclave=document.getElementById('lot-autoclave').value;
+  if(!recette||!format||!autoclave||!date){toast('Recette, Format, Autoclave et Date sont obligatoires','error');return;}
+  const parts=recette.split('|');
+  const fraction=document.getElementById('lot-fraction').value;
+  const _cap=getCapAutoclavesDyn();const cap=_cap[autoclave];
+  const fr=FRACS[fraction]||[1,1];
+  const bocauxPlan=cap?Math.floor((cap[format.replace(/\s/g,'')]||cap[format]||0)*fr[0]/fr[1]):0;
+  const temp=parseFloat(document.getElementById('lot-temp').value)||0;
+  const cfg=D.config||{};const tempMin=parseFloat(cfg['Autoclave temperature minimale (C)']||115);
+  const obj={date,recette:parts[1]||parts[0],format,autoclave,fraction,bocauxPlan,bocauxReels:parseInt(document.getElementById('lot-bocaux-reels').value)||'',tempCoeur:temp,operateur:document.getElementById('lot-operateur').value};
+  // ── Signature PIN opérateur obligatoire avant sauvegarde ──
+  checkLoginForSignature(function(){
+    obj.operateur_valide=true;
+    setBtnLoad('lot-save-btn',true,'Planifier le lot');
+    if(typeof google!=='undefined'&&google.script){
+      google.script.run.withSuccessHandler(function(res){
+        setBtnLoad('lot-save-btn',false,'Planifier le lot');
+        if(res&&res.success){
+          toast('✓ Lot '+res.numLot+' planifié','success');
+          if(temp>0&&temp<tempMin)showNCBanner('Température cœur '+temp+'°C inférieure au seuil CCP1 ('+tempMin+'°C) — lot NC !',temp);
+          closeModal('modal-lot');
+          D.planning.unshift({...obj,'N Lot (auto)':res.numLot});renderLabo();
+        }else toast('Erreur: '+(res&&res.error||'impossible'),'error');
+      }).withFailureHandler(()=>{setBtnLoad('lot-save-btn',false,'Planifier le lot');toast('Erreur réseau','error');}).saveLotProduction(obj);
+    }else{toast('Hors-ligne — données non sauvegardées','warn');closeModal('modal-lot');}
+  });
+}
+
+// ─── HACCP ────────────────────────────────────────────────────
+function renderHACCP(){
+  const nc=D.haccp.filter(h=>h['Statut']==='NC').length;
+  document.getElementById('haccp-kpis').innerHTML=`
+    <div class="kpi ${nc>0?'kpi-red':'kpi-green'}"><div class="kpi-label">NC ouvertes</div><div class="kpi-val">${nc}</div></div>
+    <div class="kpi"><div class="kpi-label">Total contrôles</div><div class="kpi-val">${D.haccp.length}</div></div>`;
+  if(!D.haccp.length){document.getElementById('haccp-tbody').innerHTML='<tr><td colspan="4"><div class="empty-state"><div class="es-icon">🛡️</div><div class="es-text">Aucun contrôle</div></div></td></tr>';return;}
+  document.getElementById('haccp-tbody').innerHTML=D.haccp.slice(0,30).map(h=>`<tr>
+    <td style="white-space:nowrap">${fmtDate(h['Date']||'')}</td>
+    <td style="font-size:11px">${esc(h['Type controle']||h['Type']||'')}</td>
+    <td>${h['Valeur mesuree']||h['Valeur']||'—'}</td>
+    <td><span class="tag ${h['Statut']==='NC'?'tag-red':'tag-green'}">${esc(h['Statut']||'OK')}</span></td>
+  </tr>`).join('');
+}
+function onHTypeChange(){
+  const type=document.getElementById('h-type').value;
+  const isCCP1=type.indexOf('CCP1')>=0;
+  const isCCP2=type.indexOf('CCP2')>=0;
+  const hint=document.getElementById('h-ccp1-hint');
+  const req1=document.getElementById('h-val-req');
+  const req2=document.getElementById('h-lim-req');
+  const valLab=document.getElementById('h-val-label');
+  const limLab=document.getElementById('h-lim-label');
+  const limEl=document.getElementById('h-lim');
+  const valEl=document.getElementById('h-val');
+  if(isCCP1){
+    hint.style.display='block';
+    req1.style.display='';req2.style.display='';
+    valLab.childNodes[0].textContent='T° cœur mesurée (°C) ';
+    limLab.childNodes[0].textContent='T° limite critique (°C) ';
+    valEl.placeholder='ex: 117.5';
+    const tempMin=parseFloat((D.config||{})['Autoclave temperature minimale (C)']||115);
+    document.getElementById('h-ccp1-seuil').textContent=tempMin+'°C';
+    if(!limEl.value) limEl.value=tempMin;
+  } else if(isCCP2){
+    hint.style.display='none';
+    req1.style.display='';req2.style.display='';
+    valLab.childNodes[0].textContent='pH mesuré ';
+    limLab.childNodes[0].textContent='pH limite ';
+    valEl.placeholder='ex: 5.8';
+    if(!limEl.value) limEl.value='';
+  } else {
+    hint.style.display='none';
+    req1.style.display='none';req2.style.display='none';
+    valLab.childNodes[0].textContent='Valeur mesurée ';
+    limLab.childNodes[0].textContent='Limite critique ';
+    valEl.placeholder='ex: 117.5';
+  }
+}
+function saveHACCP_form(){
+  const date=document.getElementById('h-date').value;
+  const desc=document.getElementById('h-desc').value;
+  const type=document.getElementById('h-type').value;
+  const isCCP=type.indexOf('CCP')>=0;
+  if(!date||!desc){toast('Date et description obligatoires','error');return;}
+  const val=parseFloat(document.getElementById('h-val').value);
+  const lim=parseFloat(document.getElementById('h-lim').value);
+  if(isCCP&&(isNaN(val)||isNaN(lim))){
+    toast('Valeur mesurée et limite critique obligatoires pour un CCP','error');
+    return;
+  }
+  const valSafe=isNaN(val)?0:val;
+  const limSafe=isNaN(lim)?0:lim;
+  const isNC=limSafe>0&&valSafe<limSafe;
+  const obj={date,type,description:desc,valeur:valSafe,limite:limSafe,
+    action:document.getElementById('h-action').value,responsable:document.getElementById('h-resp').value,
+    dateCloture:document.getElementById('h-cloture').value,statut:isNC?'NC':'OK'};
+  setBtnLoad('h-save-btn',true,'Enregistrer');
+  if(typeof google!=='undefined'&&google.script){
+    google.script.run.withSuccessHandler(res=>{
+      setBtnLoad('h-save-btn',false,'Enregistrer');
+      if(res&&res.success){toast('✓ Contrôle HACCP enregistré','success');closeModal('modal-haccp');refreshData();}
+      else toast('Erreur: '+(res&&res.error||'impossible'),'error');
+    }).withFailureHandler(()=>{setBtnLoad('h-save-btn',false,'Enregistrer');toast('Erreur réseau','error');}).saveHACCP(obj);
+  }else{toast('Hors-ligne — non sauvegardé','warn');closeModal('modal-haccp');}
+}
+
+// ─── AUTOCLAVE ────────────────────────────────────────────────
+function renderAutoclaves(){
+  const data=D.autoclaves||[];
+  const cfg=D.config||{};const tempMin=parseFloat(cfg['Autoclave temperature minimale (C)']||cfg['Temp min autoclave']||115);
+  let nbOK=0,nbNC=0;
+  data.forEach(a=>{const t=parseFloat(a['T max (C)']||a['Temp max']||a['TempMax']||0);if(t>=tempMin)nbOK++;else if(t)nbNC++;});
+  document.getElementById('autoclaves-kpis').innerHTML=`
+    <div class="kpi kpi-green"><div class="kpi-label">Cycles OK</div><div class="kpi-val">${nbOK}</div></div>
+    <div class="kpi ${nbNC>0?'kpi-red':'kpi-green'}"><div class="kpi-label">Cycles NC</div><div class="kpi-val">${nbNC}</div></div>`;
+  if(!data.length){document.getElementById('autoclaves-tbody').innerHTML='<tr><td colspan="5"><div class="empty-state"><div class="es-icon">🔥</div><div class="es-text">Aucun cycle</div></div></td></tr>';return;}
+  document.getElementById('autoclaves-tbody').innerHTML=data.slice(0,30).map(a=>{
+    const tMax=parseFloat(a['T max (C)']||a['Temp max']||a['TempMax']||0);
+    const conf=tMax>=tempMin?'OK':'NC Temp';
+    return`<tr>
+      <td style="white-space:nowrap">${fmtDate(a['Date']||'')}</td>
+      <td style="font-size:11px"><code style="color:var(--amber)">${esc(a['N Lot']||a['NumLot']||'—')}</code></td>
+      <td><span style="color:${tMax>=tempMin?'var(--green)':'var(--red)'};font-weight:600">${tMax?tMax+'°C':'—'}</span></td>
+      <td>${a['Duree (min)']||a['Durée']||'—'} min</td>
+      <td><span class="tag ${conf==='OK'?'tag-green':'tag-red'}">${conf}</span></td>
+    </tr>`;
+  }).join('');
+}
+function checkAcTemp(){
+  const cfg=D.config||{};const tempMin=parseFloat(cfg['Autoclave temperature minimale (C)']||115);
+  const val=parseFloat(document.getElementById('ac-temp').value)||0;
+  const el=document.getElementById('ac-temp-status');if(!el)return;
+  if(!val){el.textContent='';return;}
+  if(val>=tempMin){el.style.color='var(--green)';el.textContent=`✓ CCP1 OK (${val}°C ≥ ${tempMin}°C)`;}
+  else{el.style.color='var(--red)';el.textContent=`✗ SOUS-TEMPÉRATURE (${val}°C < ${tempMin}°C) — NC !`;}
+}
+function saveAutoclave_form(){
+  const date=document.getElementById('ac-date').value;
+  const autoclave=document.getElementById('ac-autoclave').value;
+  const temp=parseFloat(document.getElementById('ac-temp').value)||0;
+  if(!date||!autoclave||!temp){toast('Date, autoclave et T° max obligatoires','error');return;}
+  const cfg=D.config||{};const tempMin=parseFloat(cfg['Autoclave temperature minimale (C)']||115);
+  const recetteNom=document.getElementById('ac-recette').value;
+  const recetteObj=D.recettes.find(r=>r.nom===recetteNom||r.ref===recetteNom);
+  const dureeBareme=recetteObj?parseInt(recetteObj.dureeBareme)||0:0;
+  const dureeReelle=parseInt(document.getElementById('ac-duree').value)||0;
+  const record={date,autoclave,numLot:document.getElementById('ac-lot').value,recette:recetteNom,
+    format:document.getElementById('ac-format').value,nbBocaux:parseInt(document.getElementById('ac-bocaux').value)||0,
+    tempMax:temp,duree:dureeReelle,dureeBareme,pression:parseFloat(document.getElementById('ac-pression').value)||0,operateur:(D.user&&D.user['Nom'])||'',
+    notes:document.getElementById('ac-notes').value};
+  setBtnLoad('ac-save-btn',true,'Enregistrement…');
+  const ncTemp=temp<tempMin;
+  const ncDuree=dureeBareme>0&&dureeReelle>0&&dureeReelle<dureeBareme;
+  if(typeof google!=='undefined'&&google.script){
+    google.script.run.withSuccessHandler(r=>{
+      setBtnLoad('ac-save-btn',false,'Enregistrer cycle');
+      if(r&&r.success){
+        const msg=ncTemp?`NC SOUS-TEMPÉRATURE ${temp}°C < ${tempMin}°C`
+          :ncDuree?`NC DURÉE ${dureeReelle}min < ${dureeBareme}min requis`:null;
+        if(msg)showNCBanner(msg, ncTemp?temp:0);
+        else toast('✓ Cycle autoclave enregistré','success');
+        closeModal('modal-autoclave');
+        if(navigator.vibrate&&(ncTemp||ncDuree))navigator.vibrate([500,200,500,200,500]);
+        google.script.run.withSuccessHandler(onProdDataLoaded).withFailureHandler(()=>{}).getProductionData();
+      }else toast('Erreur: '+(r&&r.error||'inconnue'),'error');
+    }).withFailureHandler(()=>{setBtnLoad('ac-save-btn',false,'Enregistrer cycle');toast('Erreur réseau','error');}).saveAutoclave(record);
+  }else{toast('Hors-ligne — non sauvegardé','warn');closeModal('modal-autoclave');}
+}
+
+// ─── TIMER AUTOCLAVE ──────────────────────────────────────────
+var _acTimer={interval:null,seconds:0,running:false,targetSec:0,fo:0};
+function acTimerSetTarget(){
+  const min=parseInt(document.getElementById('ac-duree').value)||0;
+  _acTimer.targetSec=min*60;
+  const el=document.getElementById('ac-timer-target');
+  if(el)el.textContent=min>0?'Cible : '+min+' min':'Saisir la durée cible ci-dessous';
+}
+function _acTimerFmt(s){
+  const h=Math.floor(s/3600),m=Math.floor((s%3600)/60),sc=s%60;
+  if(h>0)return String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(sc).padStart(2,'0');
+  return String(m).padStart(2,'0')+':'+String(sc).padStart(2,'0');
+}
+function _acTimerTick(){
+  _acTimer.seconds++;
+  const disp=document.getElementById('ac-timer-display');
+  if(disp)disp.textContent=_acTimerFmt(_acTimer.seconds);
+  // ─── Calcul Fo stérilisateur (z=10°C, Tref=121.1°C) ───────────────────
+  const tempEl=document.getElementById('ac-temp');
+  const tempVal=tempEl?parseFloat(tempEl.value):NaN;
+  const foBar=document.getElementById('ac-fo-bar');
+  if(!isNaN(tempVal)&&tempVal>0){
+    if(foBar)foBar.style.display='';
+    _acTimer.fo+=Math.pow(10,(tempVal-121.1)/10)/60; // incrément en minutes
+    const foEl=document.getElementById('ac-fo-val');
+    if(foEl)foEl.textContent=_acTimer.fo.toFixed(2);
+    const foSt=document.getElementById('ac-fo-status');
+    if(foSt){
+      if(_acTimer.fo<3)foSt.textContent='⚠️ Fo insuffisant (< 3 min) — stérilisation incomplète';
+      else if(_acTimer.fo<6)foSt.textContent='✓ Fo conforme — stérilisation atteinte';
+      else foSt.textContent='✓ Fo élevé ('+_acTimer.fo.toFixed(2)+' min) — sur-stérilisation';
+      foSt.style.color=_acTimer.fo>=3?'#5ddb8a':'#f0c060';
+    }
+  }
+  // ─────────────────────────────────────────────────────────────────────────
+  if(_acTimer.targetSec>0){
+    const pct=_acTimer.seconds/_acTimer.targetSec;
+    if(disp){if(pct>=1)disp.style.color='#5ddb8a';else if(pct>=0.9)disp.style.color='#f0c060';else disp.style.color='var(--accent-l)';}
+    if(_acTimer.seconds===_acTimer.targetSec){
+      _acTimerBeep();
+      if(navigator.vibrate)navigator.vibrate([500,200,500,200,500]);
+      toast('⏰ Cycle autoclave terminé ! '+_acTimerFmt(_acTimer.seconds),'success');
+      const el=document.getElementById('ac-duree');if(el)el.value=Math.round(_acTimer.seconds/60);
+    }
+  }
+}
+function _acTimerBeep(){
+  try{
+    const ctx=new(window.AudioContext||window.webkitAudioContext)();
+    [0,250,500].forEach(delay=>{
+      setTimeout(()=>{
+        const osc=ctx.createOscillator(),gain=ctx.createGain();
+        osc.connect(gain);gain.connect(ctx.destination);
+        osc.frequency.value=880;gain.gain.setValueAtTime(0.4,ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.4);
+        osc.start(ctx.currentTime);osc.stop(ctx.currentTime+0.4);
+      },delay);
+    });
+  }catch(e){}
+}
+function acTimerStart(){
+  if(_acTimer.running)return;
+  _acTimer.running=true;_acTimer.interval=setInterval(_acTimerTick,1000);
+  document.getElementById('ac-timer-start').disabled=true;
+  document.getElementById('ac-timer-pause').disabled=false;
+  toast('Chrono démarré','info');
+}
+function acTimerPause(){
+  if(!_acTimer.running)return;
+  _acTimer.running=false;clearInterval(_acTimer.interval);
+  document.getElementById('ac-timer-start').disabled=false;
+  document.getElementById('ac-timer-pause').disabled=true;
+  // Proposer de reporter la durée chronomètrée dans le champ durée réelle
+  if(_acTimer.seconds>0){
+    const minChro=Math.round(_acTimer.seconds/60);
+    const durEl=document.getElementById('ac-duree');
+    if(durEl&&!durEl.value&&minChro>0){
+      durEl.value=minChro;
+      acTimerSetTarget();
+      toast('Durée chrono reportée : '+minChro+' min','info');
+    }
+  }
+}
+function acTimerReset(){
+  acTimerPause();_acTimer.seconds=0;_acTimer.fo=0;
+  const disp=document.getElementById('ac-timer-display');
+  if(disp){disp.textContent='00:00';disp.style.color='var(--accent-l)';}
+  document.getElementById('ac-timer-start').disabled=false;
+  document.getElementById('ac-timer-pause').disabled=true;
+  const foEl=document.getElementById('ac-fo-val');if(foEl)foEl.textContent='0.00';
+  const foSt=document.getElementById('ac-fo-status');if(foSt){foSt.textContent='Saisir T° pour activer le calcul';foSt.style.color='rgba(255,255,255,.5)';}
+  const foBar=document.getElementById('ac-fo-bar');if(foBar)foBar.style.display='none';
+}
+
+// ─── TRACABILITÉ ──────────────────────────────────────────────
+function loadTracabilite(){
+  // Lots non tracés = lots en planification sans entrée tracabilité
+  const traced=new Set((D.tracabilite||[]).map(t=>t['N Lot']||t['NumLot']||''));
+  const pending=D.planning.filter(l=>{
+    const num=l['N Lot (auto)']||l['N Lot']||l['Num Lot']||'';
+    return num&&!traced.has(num);
+  });
+  const archived=(D.tracabilite||[]).slice(0,30);
+  // KPIs
+  document.getElementById('trac-kpis').innerHTML=`
+    <div class="kpi ${pending.length>0?'kpi-amber':'kpi-green'}"><div class="kpi-label">À tracer</div><div class="kpi-val">${pending.length}</div></div>
+    <div class="kpi kpi-green"><div class="kpi-label">Tracés</div><div class="kpi-val">${archived.length}</div></div>`;
+  // Pending
+  if(!pending.length)document.getElementById('trac-pending-tbody').innerHTML='<tr><td colspan="4"><div class="empty-state"><div class="es-icon">✅</div><div class="es-text">Tous les lots sont tracés</div></div></td></tr>';
+  else document.getElementById('trac-pending-tbody').innerHTML=pending.map(l=>{
+    const num=l['N Lot (auto)']||l['N Lot']||l['Num Lot']||'—';
+    return`<tr>
+      <td><code style="color:var(--amber);font-size:10px">${esc(num)}</code></td>
+      <td style="font-size:12px">${esc(l['Recette']||'')}</td>
+      <td style="font-size:11px">${fmtDate(l['Date']||'')}</td>
+      <td><button class="btn btn-primary btn-xs" onclick="openTracabiliteModal('${esc(num)}','${esc(l['Recette']||'')}')">📷</button></td>
+    </tr>`;
+  }).join('');
+  // Archive
+  if(!archived.length)document.getElementById('trac-archive-tbody').innerHTML='<tr><td colspan="4"><div class="empty-state"><div class="es-icon">📦</div><div class="es-text">Aucune entrée</div></div></td></tr>';
+  else document.getElementById('trac-archive-tbody').innerHTML=archived.map(t=>`<tr>
+    <td><code style="color:var(--amber);font-size:10px">${esc(t['N Lot']||'—')}</code></td>
+    <td style="font-size:11px">${esc(t['MP']||t['Designation']||'')}</td>
+    <td style="font-size:11px">${esc(t['Fournisseur']||'')}</td>
+    <td style="font-size:11px">${esc(t['DLC fournisseur']||t['DLC']||'')}</td>
+  </tr>`).join('');
+}
+
+var _currentTracLot='';var _currentTracRecette='';var _tracIngrs=[];
+function openTracabiliteModal(numLot,recette){
+  _currentTracLot=numLot;_currentTracRecette=recette;
+  document.getElementById('trac-lot-num').textContent=numLot;
+  document.getElementById('trac-recette').textContent=recette;
+  document.getElementById('trac-date-prod').value=new Date().toISOString().split('T')[0];
+  if(D.user&&D.user['Nom'])document.getElementById('trac-operateur').value=D.user['Nom'];
+  // Récupérer les ingrédients de la recette
+  const r=D.recettes.find(x=>x.nom===recette||x.ref===recette);
+  _tracIngrs=(r&&r.ingredients)||[];
+  renderTracIngrs();
+  openModal('modal-tracabilite');
+}
+function renderTracIngrs(){
+  const el=document.getElementById('trac-ingrs-list');
+  if(!_tracIngrs.length){
+    el.innerHTML='<div style="font-size:13px;color:var(--stone);text-align:center;padding:16px">Ingrédients non disponibles<br><small>Charger le catalogue recettes (vue Gérant)</small></div>';
+    // Créer quand même un formulaire libre
+    el.innerHTML+='<div class="trac-ingr-row"><div class="trac-ingr-header"><span class="trac-ingr-name">Saisie libre MP</span></div>'+_tracFormRow('libre','Matière première')+'</div>';
+    return;
+  }
+  el.innerHTML=_tracIngrs.map((ingr,i)=>`
+    <div class="trac-ingr-row">
+      <div class="trac-ingr-header">
+        <span class="trac-ingr-name">${esc(ingr.nom||ingr.code||'MP '+i)}</span>
+        <button class="photo-btn" onclick="analyzeEtiquette(${i})">📷 Photo</button>
+      </div>
+      ${_tracFormRow(i,ingr.nom||'')}
+    </div>`).join('');
+}
+function _tracFormRow(i,nom){
+  return`<div class="form-row c2" style="margin-bottom:0">
+    <div class="form-group">
+      <label class="fl" style="font-size:9px">N° Lot fournisseur</label>
+      <input type="text" id="trac-lot-fourn-${i}" placeholder="ex: L2025032804" style="font-size:14px">
+    </div>
+    <div class="form-group">
+      <label class="fl" style="font-size:9px">Fournisseur</label>
+      <input type="text" id="trac-fourn-${i}" placeholder="Fournisseur" style="font-size:14px">
+    </div>
+  </div>
+  <div class="form-row" style="margin-top:6px;margin-bottom:0">
+    <div class="form-group">
+      <label class="fl" style="font-size:9px">DLC fournisseur</label>
+      <input type="date" id="trac-dlc-${i}" style="font-size:14px">
+    </div>
+  </div>
+  <input type="file" id="trac-photo-${i}" accept="image/*" capture="environment" style="display:none" onchange="onPhotoSelected(${i},this)">
+  <img id="trac-photo-preview-${i}" class="photo-preview" style="display:none">`;
+}
+function onPhotoSelected(i,input){
+  if(!input.files||!input.files[0])return;
+  const reader=new FileReader();
+  reader.onload=function(e){
+    const prev=document.getElementById('trac-photo-preview-'+i);
+    if(prev){prev.src=e.target.result;prev.style.display='block';}
+    analyzeEtiquetteWithData(i,e.target.result.split(',')[1]);
+  };
+  reader.readAsDataURL(input.files[0]);
+}
+function analyzeEtiquette(i){
+  const fileInput=document.getElementById('trac-photo-'+i);if(fileInput)fileInput.click();
+}
+function analyzeEtiquetteWithData(i,b64){
+  const prog=document.getElementById('trac-progress');
+  if(prog){prog.style.display='block';prog.textContent='🤖 Analyse IA en cours…';}
+  const nomIngr=_tracIngrs[i]?(_tracIngrs[i].nom||_tracIngrs[i].code):'MP';
+  const prompt=`Analyse cette étiquette de matière première "${nomIngr}". Extrais UNIQUEMENT en JSON (pas de markdown) :
+{"numLot":"...","fournisseur":"...","dlc":"YYYY-MM-DD"}
+Si une info est absente, laisse la valeur "". Réponds UNIQUEMENT avec le JSON.`;
+  if(typeof google!=='undefined'&&google.script&&google.script.run){
+    google.script.run.withSuccessHandler(function(res){
+      if(prog)prog.style.display='none';
+      try{
+        const txt=res&&res.text?res.text:(typeof res==='string'?res:'{}');
+        const clean=txt.replace(/```json|```/g,'').trim();
+        const data=JSON.parse(clean);
+        if(data.numLot){const el=document.getElementById('trac-lot-fourn-'+i);if(el)el.value=data.numLot;}
+        if(data.fournisseur){const el=document.getElementById('trac-fourn-'+i);if(el)el.value=data.fournisseur;}
+        if(data.dlc){const el=document.getElementById('trac-dlc-'+i);if(el)el.value=data.dlc;}
+        toast('✓ Étiquette analysée','success');
+      }catch(e){toast('Analyse partielle — vérifier manuellement','warn');}
+    }).withFailureHandler(function(){if(prog)prog.style.display='none';toast('Analyse IA indisponible','warn');})
+    .analyzeImageWithGemini(b64,prompt);
+  }else{if(prog)prog.style.display='none';toast('IA non disponible hors-ligne','warn');}
+}
+function saveTracabilite_form(){
+  const operateur=document.getElementById('trac-operateur').value;
+  const dateProd=document.getElementById('trac-date-prod').value;
+  const entries=[];
+  const count=_tracIngrs.length||1;
+  const manquants=[];
+  for(let i=0;i<count;i++){
+    const lot=document.getElementById('trac-lot-fourn-'+i);
+    const fourn=document.getElementById('trac-fourn-'+i);
+    const dlc=document.getElementById('trac-dlc-'+i);
+    const nomMP=_tracIngrs[i]?(_tracIngrs[i].nom||_tracIngrs[i].code||'MP '+(i+1)):'MP '+(i+1);
+    if(!lot||!lot.value.trim()){
+      manquants.push(nomMP);
+      if(lot)lot.style.borderColor='var(--red)';
+    } else {
+      if(lot)lot.style.borderColor='';
+      entries.push({
+        numLot:_currentTracLot,recette:_currentTracRecette,
+        mp:nomMP,
+        numLotFourn:lot.value.trim(),
+        fournisseur:fourn?fourn.value:'',
+        dlcFourn:dlc?dlc.value:'',
+        operateur,dateProd
+      });
+    }
+  }
+  if(manquants.length){
+    toast('N° lot fournisseur obligatoire pour : '+manquants.join(', '),'error');
+    return;
+  }
+  if(!entries.length){toast('Aucun ingrédient à enregistrer','error');return;}
+  setBtnLoad('trac-save-btn',true,'Enregistrement…');
+  if(typeof google!=='undefined'&&google.script){
+    google.script.run.withSuccessHandler(res=>{
+      setBtnLoad('trac-save-btn',false,'Enregistrer');
+      if(res&&res.success){toast('✓ Traçabilité enregistrée','success');closeModal('modal-tracabilite');refreshData();}
+      else toast('Erreur: '+(res&&res.error||'impossible'),'error');
+    }).withFailureHandler(()=>{setBtnLoad('trac-save-btn',false,'Enregistrer');toast('Erreur réseau','error');}).saveTracabilite(entries);
+  }else{toast('Hors-ligne — non sauvegardé','warn');closeModal('modal-tracabilite');}
+}
+
+// ─── INDICATEUR RÉSEAU ───────────────────────────────────────
+(function(){
+  function _updateDot(){
+    const dot=document.getElementById('netDot');if(!dot)return;
+    if(navigator.onLine){dot.classList.remove('offline');dot.title='En ligne';}
+    else{dot.classList.add('offline');dot.title='Hors-ligne';}
+  }
+  _updateDot();
+  window.addEventListener('online',_updateDot);
+  window.addEventListener('offline',_updateDot);
+  // Restauration mode lot rapide
+  try{if(localStorage.getItem('m41_lot_rapide')==='1'){document.body.classList.add('lot-rapide');const b=document.getElementById('lot-rapide-toggle');if(b){b.classList.add('on');b.textContent='⚡ Complet';}}}catch(e){}
+})();
+
+// ─── SIGNATURE PIN ────────────────────────────────────────────
+var _sigPin='';var _sigCallback=null;var _sigCancelCallback=null;
+function checkLoginForSignature(callback,cancelCb){
+  _sigPin='';_sigCallback=callback;_sigCancelCallback=cancelCb||null;
+  document.getElementById('sig-sub').textContent=(D.user&&D.user['Nom'])?'PIN de '+D.user['Nom']+' requis':'Saisissez votre PIN pour valider';
+  document.getElementById('sig-err').textContent='';
+  _sigUpdDots();
+  document.getElementById('sig-overlay').classList.add('open');
+}
+function _sigUpdDots(){
+  for(var i=0;i<4;i++){const el=document.getElementById('sd'+i);if(el)el.classList.toggle('filled',i<_sigPin.length);}
+}
+function _sigPress(d){
+  if(d===''){ _sigPin='';_sigUpdDots();return; }
+  if(_sigPin.length>=4)return;
+  _sigPin+=d;_sigUpdDots();
+  if(_sigPin.length===4)_sigVerify();
+}
+function _sigDel(){_sigPin=_sigPin.slice(0,-1);_sigUpdDots();}
+function _sigVerify(){
+  document.getElementById('sig-err').textContent='Vérification…';
+  const ps=_sigPin;_sigPin='';_sigUpdDots();
+  if(typeof google!=='undefined'&&google.script&&google.script.run){
+    google.script.run
+      .withSuccessHandler(function(user){
+        if(user){
+          // Vérifie que c'est bien l'opérateur connecté
+          if(D.user&&String(user['Nom']||'').trim()!==String(D.user['Nom']||'').trim()){
+            document.getElementById('sig-err').textContent='Ce PIN n\'appartient pas à '+D.user['Nom'];
+          }else{
+            document.getElementById('sig-overlay').classList.remove('open');
+            document.getElementById('sig-err').textContent='';
+            if(_sigCallback)_sigCallback();
+          }
+        }else{document.getElementById('sig-err').textContent='PIN incorrect — réessayez';}
+      })
+      .withFailureHandler(function(){document.getElementById('sig-err').textContent='Erreur réseau';})
+      .checkLogin(ps);
+  }else{
+    // Mode hors-ligne : on laisse passer (pas de vérif possible)
+    document.getElementById('sig-overlay').classList.remove('open');
+    if(_sigCallback)_sigCallback();
+  }
+}
+function _sigCancel(){
+  document.getElementById('sig-overlay').classList.remove('open');
+  _sigPin='';document.getElementById('sig-err').textContent='';
+  if(_sigCancelCallback)_sigCancelCallback();
+}
+function toggleLotRapide(){
+  const on=document.body.classList.toggle('lot-rapide');
+  const btn=document.getElementById('lot-rapide-toggle');
+  if(btn){btn.classList.toggle('on',on);btn.textContent=on?'⚡ Complet':'⚡ Rapide';}
+  try{localStorage.setItem('m41_lot_rapide',on?'1':'0');}catch(e){}
+  // En mode rapide : auto-sélectionner premier format/autoclave disponibles
+  if(on){
+    const fmt=document.getElementById('lot-format');
+    if(fmt&&!fmt.value&&fmt.options.length>1)fmt.value=fmt.options[1].value;
+    const ac=document.getElementById('lot-autoclave');
+    if(ac&&!ac.value&&ac.options.length>1)ac.value=ac.options[1].value;
+    const op=document.getElementById('lot-operateur');
+    if(op&&!op.value&&D&&D.user)op.value=D.user.Nom||'';
+  }
+}
+window.toggleLotRapide=toggleLotRapide;
+
+// ─── PHOTO PRODUIT FINI ───────────────────────────────────────
+function uploadLotPhoto(input, numLot){
+  const file=input.files[0];
+  if(!file){return;}
+  if(file.size>4*1024*1024){toast('Photo trop lourde (max 4 Mo)','error');return;}
+  const reader=new FileReader();
+  reader.onload=function(e){
+    const b64=e.target.result.replace(/^data:image\/\w+;base64,/,'');
+    const mime=file.type||'image/jpeg';
+    toast('Upload photo en cours…','info');
+    google.script.run
+      .withSuccessHandler(function(r){
+        if(r&&r.success){
+          toast('✓ Photo produit archivée — '+esc(numLot),'success');
+          refreshData(); // recharge les lots pour afficher 🖼️
+        } else {
+          toast('Erreur photo : '+(r&&r.error||'Drive inaccessible'),'error');
+        }
+      })
+      .withFailureHandler(function(){toast('Erreur réseau photo','error');})
+      .saveProductPhoto({numLot:numLot, base64:b64, mimeType:mime});
+  };
+  reader.readAsDataURL(file);
+}
+window.uploadLotPhoto=uploadLotPhoto;
+
+
+// ─── WINDOW EXPORTS ───────────────────────────────────────────
+// ─── ONBOARDING (première connexion) ────────────────────────────────────────
+var _obStep=0,_obRole='';
+function _checkOnboarding(role){
+  _obRole=role;
+  try{if(localStorage.getItem('m41_onboarded_'+role)==='1')return;}catch(e){}
+  var ov=document.getElementById('onboard-overlay');
+  if(ov){_obStep=0;_obRender();ov.classList.add('visible');}
+}
+function _obRender(){
+  var steps=document.querySelectorAll('.ob-step');
+  steps.forEach(function(s,i){s.classList.toggle('active',i===_obStep);});
+  document.querySelectorAll('.ob-dot').forEach(function(d,i){d.classList.toggle('active',i===_obStep);});
+  var btn=document.getElementById('ob-btn');if(btn)btn.textContent=(_obStep===steps.length-1)?'Commencer →':'Suivant →';
+}
+function _obNext(){
+  var steps=document.querySelectorAll('.ob-step');
+  if(_obStep<steps.length-1){_obStep++;_obRender();}else _obClose();
+}
+function _obClose(){
+  try{localStorage.setItem('m41_onboarded_'+_obRole,'1');}catch(e){}
+  var ov=document.getElementById('onboard-overlay');if(ov)ov.classList.remove('visible');
+}
+window._obNext=_obNext;window._obClose=_obClose;
+window.navigate=navigate;window.openModal=openModal;window.closeModal=closeModal;
+window.openLotModal=openLotModal;window.openPreprodChecklist=openPreprodChecklist;
+window.confirmPreprodChecklist=confirmPreprodChecklist;window.checkPreprodProgress=checkPreprodProgress;
+window.onLotRecetteChange=onLotRecetteChange;window.calcBocaux=calcBocaux;
+window.saveLot=saveLot;window.saveHACCP_form=saveHACCP_form;window.saveAutoclave_form=saveAutoclave_form;
+window.onHTypeChange=onHTypeChange;
+window.checkAcTemp=checkAcTemp;window.acTimerSetTarget=acTimerSetTarget;
+window.acTimerStart=acTimerStart;window.acTimerPause=acTimerPause;window.acTimerReset=acTimerReset;
+window.openTracabiliteModal=openTracabiliteModal;window.analyzeEtiquette=analyzeEtiquette;
+window.onPhotoSelected=onPhotoSelected;window.saveTracabilite_form=saveTracabilite_form;
+window.acknowledgeNC=acknowledgeNC;window.doLogout=doLogout;window.refreshData=refreshData;
+window.checkLoginForSignature=checkLoginForSignature;
+</script>
+
+<!-- ═══ INJECTION GAS ═══ -->
+<!-- ── Modal signature PIN ── -->
+<div class="sig-overlay" id="sig-overlay">
+  <div class="sig-box">
+    <div class="sig-title">🔏 Signature opérateur</div>
+    <div class="sig-sub" id="sig-sub">Saisissez votre PIN pour valider</div>
+    <div class="sig-dots">
+      <div class="sig-dot" id="sd0"></div><div class="sig-dot" id="sd1"></div>
+      <div class="sig-dot" id="sd2"></div><div class="sig-dot" id="sd3"></div>
+    </div>
+    <div class="sig-pad">
+      <button class="sig-btn" onclick="_sigPress('1')">1</button>
+      <button class="sig-btn" onclick="_sigPress('2')">2</button>
+      <button class="sig-btn" onclick="_sigPress('3')">3</button>
+      <button class="sig-btn" onclick="_sigPress('4')">4</button>
+      <button class="sig-btn" onclick="_sigPress('5')">5</button>
+      <button class="sig-btn" onclick="_sigPress('6')">6</button>
+      <button class="sig-btn" onclick="_sigPress('7')">7</button>
+      <button class="sig-btn" onclick="_sigPress('8')">8</button>
+      <button class="sig-btn" onclick="_sigPress('9')">9</button>
+      <button class="sig-btn" onclick="_sigPress('')" style="font-size:11px;color:var(--stone)">✕</button>
+      <button class="sig-btn" onclick="_sigPress('0')">0</button>
+      <button class="sig-btn" onclick="_sigDel()" style="font-size:14px">⌫</button>
+    </div>
+    <div class="sig-err" id="sig-err"></div>
+    <button class="sig-cancel" onclick="_sigCancel()">Annuler</button>
+  </div>
+</div>
+<script>
+(function(){try{window._APP_ROLE='<?!= appRole ?>';}catch(e){window._APP_ROLE='ouvrier';}})();
+</script>
+<script>
+(function(){
+  try{
+    var rawU=<?!= initialUsers ?>;
+    window._USERS_RAW=Array.isArray(rawU)?rawU:[];
+    if(typeof renderUserGrid==='function')renderUserGrid();
+  }catch(eu){window._USERS_RAW=[];}
+})();
+</script>
+<script>
+(function(){
+  try{
+    var ad=<?!= initialAppData ?>;
+    if(ad&&!ad.error&&typeof onAppDataLoaded==='function')onAppDataLoaded(ad);
+    else if(ad&&ad.error&&typeof toast==='function')toast('⚠️ '+ad.error,'warn');
+  }catch(ea){}
+  _hideLoader();
+})();
+</script>
+<script>
+(function(){
+  try{
+    var pd=<?!= initialProdData ?>;
+    if(pd&&!pd.error&&typeof onProdDataLoaded==='function')onProdDataLoaded(pd);
+  }catch(ep){}
+})();
+</script>
+</body>
+</html>
